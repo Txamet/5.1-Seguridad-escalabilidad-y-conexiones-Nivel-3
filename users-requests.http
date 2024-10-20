@@ -1,0 +1,33 @@
+### Register a new user
+POST http://localhost:3000/users/register
+Content-Type: application/json
+
+{
+  "name": "Jaume",  
+  "email": "testuser@example.com",
+  "password": "password123"
+}
+
+### Login a user to get a token
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+  "email": "testuser@example.com",
+  "password": "password123"
+}
+
+### Get all users (requires authentication)
+# Replace 'your_jwt_token' with the token you get from the login response
+GET http://localhost:3000/users
+Authorization: Bearer your_jwt_token
+
+### Soft delete a user by ID (requires authentication)
+# Replace 'user_id' with the actual user ID you want to delete
+DELETE http://localhost:3000/users/b59d913d-8fcb-4ec8-ad41-5b1a88d7895a
+Authorization: Bearer your_jwt_token
+
+### Restore a user by ID (requires authentication)
+# Replace 'user_id' with the actual user ID you want to restore
+POST http://localhost:3000/users/user_id/restore
+Authorization: Bearer your_jwt_token

@@ -1,0 +1,48 @@
+### Edit PORT number in this line 
+@BASE_URL= http://localhost:3000
+
+
+### Add an admin
+POST {{BASE_URL}}/users
+Content-Type: application/json
+
+{
+    "name": "Jaume",
+    "email": "jaume@gmail.com",
+    "password": "123456"
+}
+
+
+### Add an user
+POST {{BASE_URL}}/users
+Content-Type: application/json
+
+{
+    "name": "Jimmy Page",
+    "email": "jimmypage@gmail.com",
+    "password": "123456"
+}
+
+### Update user 2 data
+PUT {{BASE_URL}}/users/467d5ece-509c-4b5b-8eaa-9b9c49190b73
+Content-Type: application/json
+
+{
+    "name": "James",
+    "email": "jimmypage@gmail.com",
+    "password": "1234567"
+}
+
+### Delete user 1 
+DELETE {{BASE_URL}}/users/467d5ece-509c-4b5b-8eaa-9b9c49190b73
+Content-Type: application/json
+
+
+### Recover user 1 
+PATCH {{BASE_URL}}/users/0451f80e-f8fd-476f-bdca-141cc0a4a2d4/recover
+Content-Type: application/json
+
+
+### Display all users 
+GET {{BASE_URL}}/users
+Content-Type: application/json
