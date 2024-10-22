@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client';
 import { UserEntity } from '../../domain/entities/user-entity';
 import { UserValue } from '../../domain/values/user-value';
 import { UserRepository } from "../../domain/repositories/user-repository";
-import { HashService } from '../../application/services/hash-service';
 
 const prisma = new PrismaClient();
 
@@ -55,32 +54,30 @@ export class prismaUserModel implements UserRepository {
     };
 
     async registerAdmin(user: UserEntity): Promise<UserEntity | null> {
-        let passwordHash = await HashService.hashPassword(user.email)
         const createdAdmin = await prisma.user.create({
             data: {
                 name: user.name,
                 email: user.email,
-                password: passwordHash,
+                password: user.password,
                 role: "admin"
             }
         });
 
-        const result = new UserValue(createdAdmin.name, createdAdmin.email, createdAdmin.password);
+        const result = new UserValue(createdAdmin.name, createdAdmin.email, createdAdmin.password, createdAdmin.role);
         return result
     }
 
     async registerUser(user: UserEntity): Promise<UserEntity | null> {
-        let passwordHash = await HashService.hashPassword(user.email)
         const createdUser = await prisma.user.create({
             data: {
                 name: user.name,
                 email: user.email,
-                password: passwordHash,
+                password: user.password,
                 role: "simpleUser"
             }
         });
 
-        const result = new UserValue(createdUser.name, createdUser.email, createdUser.password);
+        const result = new UserValue(createdUser.name, createdUser.email, createdUser.password, createdUser.role);
         return result
     }
 

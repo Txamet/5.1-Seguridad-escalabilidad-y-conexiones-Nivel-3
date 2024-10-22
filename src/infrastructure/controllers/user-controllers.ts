@@ -1,5 +1,5 @@
 import { prismaUserModel } from "../repositories/prisma-user-repository"
-import { UserUseCase } from "../../application/use-cases/user/user-use-case";
+import { UserUseCase } from "../../application/use-cases/user-use-case";
 
 const userModel = new prismaUserModel();
 const userUseCase = new UserUseCase(userModel)
@@ -17,7 +17,7 @@ export class UserController {
                 return res.status(400).json({ error: "Admin already exists" })
             }
 
-            const newAdmin = await userUseCase.registerAdmin(req.body);
+            const newAdmin = await userUseCase.registerAdmin({ name, email, password });
             res.status(200).json(newAdmin)
 
         } catch (error) {
@@ -39,7 +39,7 @@ export class UserController {
 
             const totalUsers = await userUseCase.getFirstInList(1);
             if (totalUsers.length === 0 || totalUsers === null || totalUsers === undefined) {
-                const newAdmin = await userUseCase.registerAdmin(req.body);
+                const newAdmin = await userUseCase.registerAdmin({ name, email, password });
                 res.status(200).json(newAdmin)
 
             } else {
@@ -123,12 +123,12 @@ export class UserController {
 
     static async loginUser(req: any, res: any) {
         try {
-            const { email, password } = req.body;
+            const { email, password } = req.body; 
             const token = await userUseCase.loginUser(email, password);
-            res.json({token})
+            res.json({email, token})
 
-        } catch (error) {
-            res.status(500).json({ error: "Error retrieving user" })
+        } catch (error: any) {
+            res.status(500).send(error.message)
         }
     }
 }

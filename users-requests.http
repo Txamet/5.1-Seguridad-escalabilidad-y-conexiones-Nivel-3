@@ -29,5 +29,15 @@ Authorization: Bearer your_jwt_token
 
 ### Restore a user by ID (requires authentication)
 # Replace 'user_id' with the actual user ID you want to restore
-POST http://localhost:3000/users/user_id/restore
+PATCH http://localhost:3000/users/user_id/restore
 Authorization: Bearer your_jwt_token
+
+### Update user data
+# Replace 'user_id' with the actual user ID you want to restore
+PUT http://localhost:3000/users/user_id/
+Authorization: Bearer your_jwt_token
+Content-Type: application/json
+
+{
+  "name": "James",
+}
