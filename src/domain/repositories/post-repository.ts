@@ -6,7 +6,7 @@ export interface PostRepository {
     deletePost(id: string): Promise<void>;
     recoverPost(id: string): Promise<void>;
     getPostsByUser(id: string): Promise<PostEntity[]>;
-    getDeletedPostsByUser(id: string): Promise<PostEntity | null>;
+    getDeletedPostsByUser(id: string): Promise<PostEntity[]>;
     getAllPosts(): Promise<PostEntity[]>;
     findPostById(id: string): Promise<PostEntity | null>;
     findDeletedPostById(id: string): Promise<PostEntity | null>;

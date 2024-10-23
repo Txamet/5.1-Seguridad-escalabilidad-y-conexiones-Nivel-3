@@ -1,7 +1,7 @@
 export interface PostEntity {
     id: string;
     title: string; 
-    content: String; 
+    content: string; 
     createdAt: Date;
     updatedAt: Date;
     deleted: boolean; 

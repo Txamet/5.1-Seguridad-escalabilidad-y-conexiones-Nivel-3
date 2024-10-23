@@ -1,6 +1,7 @@
 import express from "express";
-import userRoutes from "./infrastructure/routes/user-routes"
-import dotenv from "dotenv"
+import userRoutes from "./infrastructure/routes/user-routes";
+import postRoutes from "./infrastructure/routes/post-routes"
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -19,7 +20,7 @@ module.exports={BASE_URL}
 app.use(express.urlencoded({extended: false}))
 
 app.use("/users", userRoutes);
-
+app.use("/posts", postRoutes);
 
 app.use((req, res) => {
     res.status(404).json({

@@ -41,3 +41,14 @@ Content-Type: application/json
 {
   "name": "James",
 }
+
+
+### Create a post
+POST http://localhost:3000/posts/create-post
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmYzJlNzQwNC1lMGE4LTQ4ZjQtODJkNy1iNzE1OTAxZWYxZWMiLCJpYXQiOjE3Mjk3MjA2MzIsImV4cCI6MTcyOTcyNDIzMn0.UM-4RGBqKvc8LoIaQZDBuLWd65-8cIJq3INyN4OROXE
+Content-Type: application/json
+
+{
+  "title": "Hola mundo!",
+  "content": "Hola mundo, me llamo Jaume Blanco"
+}
