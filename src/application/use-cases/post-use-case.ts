@@ -6,15 +6,15 @@ export class PostUseCase {
 
     }
 
-    async createPost({title, content, userId}: {title: string, content: string, userId: string}) {
-        const postValue = new PostValue(title, content, userId);
+    async createPost({id, title, content, userId}: {id: string, title: string, content: string, userId: string}) {
+        const postValue = new PostValue(id, title, content, userId);
         const post = await this.postRepository.createPost(postValue);
 
         return post;
     }
 
     async updatePost(id: string, {title, content, userId}: {title: string, content: string, userId: string}) {
-        const postValue = new PostValue(title, content, userId);
+        const postValue = new PostValue(id, title, content, userId);
         const post = await this.postRepository.updatePost(id, postValue);
 
         return post;

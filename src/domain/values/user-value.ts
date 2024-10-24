@@ -1,4 +1,4 @@
-import { v4 as uuid } from "uuid"
+//import { v4 as uuid } from "uuid"
 import { UserEntity } from "../entities/user-entity";
 
 export class UserValue implements UserEntity {
@@ -9,8 +9,8 @@ export class UserValue implements UserEntity {
     role: string;
     deleted: boolean;
 
-    constructor( name: string, email: string, password: string, role?: any ) {
-        this.id = uuid();
+    constructor( id: string, name: string, email: string, password: string, role: string ) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;

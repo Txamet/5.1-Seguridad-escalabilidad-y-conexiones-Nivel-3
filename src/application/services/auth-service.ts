@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 
 export class AuthService {
-  static generateToken(userId: string): string {
-    return jwt.sign({ userId }, process.env.JWT_SECRET || "secret", {
+  static generateToken(userId: string, role: string): string {
+    return jwt.sign({ id: userId, role: role }, process.env.JWT_SECRET || "secret", {
       expiresIn: "1h",
     });
   }

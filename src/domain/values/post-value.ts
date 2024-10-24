@@ -10,8 +10,8 @@ export class PostValue implements PostEntity {
     deleted: boolean; 
     userId: string;
 
-    constructor( title: string, content: string, userId: string) {
-        this.id = uuid();
+    constructor( id: string, title: string, content: string, userId: string) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.createdAt = new Date();

@@ -16,7 +16,7 @@ export class prismaPostModel implements PostRepository {
             }
         })
 
-        const result = new PostValue(createdPost.title, createdPost.content, createdPost.userId);
+        const result = new PostValue(createdPost.id, createdPost.title, createdPost.content, createdPost.userId);
         return result;
     }
 
@@ -30,7 +30,7 @@ export class prismaPostModel implements PostRepository {
             }
         })
 
-        const result = new PostValue(updatedPost.title, updatedPost.content, updatedPost.userId);
+        const result = new PostValue(updatedPost.id, updatedPost.title, updatedPost.content, updatedPost.userId);
         return result;
     }
 
@@ -78,7 +78,7 @@ export class prismaPostModel implements PostRepository {
 
         if (!post) return null
 
-        const result = new PostValue(post.title, post.content, post.userId);
+        const result = new PostValue(post.id, post.title, post.content, post.userId);
         return result
     }
 
@@ -89,7 +89,7 @@ export class prismaPostModel implements PostRepository {
 
         if (!post) return null
         
-        const result = new PostValue(post.title, post.content, post.userId);
+        const result = new PostValue(post.id, post.title, post.content, post.userId);
         return result
     }
 }

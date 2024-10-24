@@ -1,5 +1,6 @@
 import { prismaUserModel } from "../repositories/prisma-user-repository"
 import { UserUseCase } from "../../application/use-cases/user-use-case";
+import { v4 as uuid } from "uuid"
 
 const userModel = new prismaUserModel();
 const userUseCase = new UserUseCase(userModel)
@@ -17,7 +18,7 @@ export class UserController {
                 return res.status(400).json({ error: "Admin already exists" })
             }
 
-            const newAdmin = await userUseCase.registerAdmin({ name, email, password });
+            const newAdmin = await userUseCase.registerAdmin({ id: uuid(), name, email, password });
             res.status(200).json(newAdmin)
 
         } catch (error) {
@@ -39,7 +40,7 @@ export class UserController {
 
             const totalUsers = await userUseCase.getFirstInList(1);
             if (totalUsers.length === 0 || totalUsers === null || totalUsers === undefined) {
-                const newAdmin = await userUseCase.registerAdmin({ name, email, password });
+                const newAdmin = await userUseCase.registerAdmin({ id: uuid(), name, email, password });
                 res.status(200).json(newAdmin)
 
             } else {

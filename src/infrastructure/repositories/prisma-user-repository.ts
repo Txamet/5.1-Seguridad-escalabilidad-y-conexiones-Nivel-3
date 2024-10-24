@@ -21,7 +21,7 @@ export class prismaUserModel implements UserRepository {
 
         if (!user) return null
 
-        const result = new UserValue(user.name, user.email, user.password);
+        const result = new UserValue(user.id, user.name, user.email, user.password, user.role);
         return result
     }
 
@@ -32,7 +32,7 @@ export class prismaUserModel implements UserRepository {
 
         if (!user) return null
 
-        const result = new UserValue(user.name, user.email, user.password);
+        const result = new UserValue(user.id, user.name, user.email, user.password, user.role);
         return result
     }
 
@@ -43,7 +43,7 @@ export class prismaUserModel implements UserRepository {
 
         if (!user) return null
 
-        const result = new UserValue(user.name, user.email, user.password);
+        const result = new UserValue(user.id, user.name, user.email, user.password, user.role);
         return result
     }
 
@@ -63,7 +63,7 @@ export class prismaUserModel implements UserRepository {
             }
         });
 
-        const result = new UserValue(createdAdmin.name, createdAdmin.email, createdAdmin.password, createdAdmin.role);
+        const result = new UserValue(createdAdmin.id, createdAdmin.name, createdAdmin.email, createdAdmin.password, createdAdmin.role);
         return result
     }
 
@@ -77,7 +77,7 @@ export class prismaUserModel implements UserRepository {
             }
         });
 
-        const result = new UserValue(createdUser.name, createdUser.email, createdUser.password, createdUser.role);
+        const result = new UserValue(createdUser.id, createdUser.name, createdUser.email, createdUser.password, createdUser.role);
         return result
     }
 
@@ -98,7 +98,7 @@ export class prismaUserModel implements UserRepository {
             }
         })
 
-        const result = new UserValue(updatedUser.name, updatedUser.email, updatedUser.password);
+        const result = new UserValue(updatedUser.id, updatedUser.name, updatedUser.email, updatedUser.password, updatedUser.role);
         return result
     }
 

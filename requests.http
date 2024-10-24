@@ -1,0 +1,59 @@
+### Edit PORT number in this line 
+@BASE_URL= http://localhost:3000
+
+### Edit Authorization token in this line 
+@TOKEN = 
+
+
+### Register a new user
+POST {{BASE_URL}}/users/register
+Content-Type: application/json
+
+{
+  "name": "Jaume",  
+  "email": "jestuser@example.com",
+  "password": "password123"
+}
+
+### Login a user to get a token
+POST {{BASE_URL}}/users/login
+Content-Type: application/json
+
+{
+  "email": "jestuser@example.com",
+  "password": "password123"
+}
+
+### Get all users (requires authentication)
+GET {{BASE_URL}}/users
+Authorization: Bearer {{TOKEN}}
+
+### Soft delete a user by ID (requires authentication)
+# Replace 'userId' with the actual user ID you want to delete
+DELETE {{BASE_URL}}/users/userId
+Authorization: Bearer {{TOKEN}}
+
+### Restore a user by ID (requires authentication)
+# Replace 'userId' with the actual user ID you want to restore
+PATCH {{BASE_URL}}/users/userID/recover
+Authorization: Bearer {{TOKEN}}
+
+### Update user data
+# Replace 'userId' with the actual user ID you want to restore
+PUT {{BASE_URL}}/users/userId
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "name": "James"
+}
+
+### Create a post
+POST {{BASE_URL}}/posts/create-post
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "title": "Hola mundo!",
+  "content": "Hola mundo, me llamo Jaume Blanco González"
+}

@@ -3,6 +3,7 @@ import { UserValue } from "../../domain/values/user-value";
 import { AuthService } from "../services/auth-service";
 import { HashService } from '../services/hash-service';
 
+
 export class UserUseCase {
     constructor(private readonly userRepository: UserRepository){
 
@@ -13,9 +14,9 @@ export class UserUseCase {
         return user
     }
 
-    async registerUser({name, email, password}: {name: string, email: string, password: string}) {
+    async registerUser({id, name, email, password}: {id: string, name: string, email: string, password: string}) {
         let passwordHash = await HashService.hashPassword(password); 
-        const userValue = new UserValue(name, email, passwordHash);
+        const userValue = new UserValue(id, name, email, passwordHash, "simpleUser");
        
         const user = await this.userRepository.registerUser(userValue);
 
@@ -23,9 +24,9 @@ export class UserUseCase {
         return user;
     }
 
-    async registerAdmin({name, email, password}: {name: string, email: string, password: string}) {
+    async registerAdmin({id, name, email, password}: {id: string, name: string, email: string, password: string}) {
         let passwordHash = await HashService.hashPassword(password);
-        const userValue = new UserValue(name, email, passwordHash);
+        const userValue = new UserValue(id, name, email, passwordHash, "admin");
 
         const user = await this.userRepository.registerAdmin(userValue);
 
@@ -33,8 +34,8 @@ export class UserUseCase {
         return user;
     }
 
-    async updateUser(id: string, {name, email, password}: {name: string, email: string, password: string}) {
-        const userValue = new UserValue(name, email, password);
+    async updateUser(id: string, {name, email, password, role}: {name: string, email: string, password: string, role: string}) {
+        const userValue = new UserValue(id, name, email, password, role);
         const user = await this.userRepository.updateUser(id, userValue);
         
         return user;
@@ -57,14 +58,14 @@ export class UserUseCase {
     async loginUser(email: string, password: string) {
         const user: any = await this.userRepository.findUserByEmail(email);
         if (!user) throw new Error("User doesn't exists");
-        
+        console.log(user, user.id)
         const comparePassword = await HashService.comparePassword(password, user.password)
 
         if (!comparePassword) {
             throw new Error("Credentials are invalid");
 
         } else {
-            return AuthService.generateToken(user.id);
+            return AuthService.generateToken(user.id, user.role);
         }  
     }
 }
