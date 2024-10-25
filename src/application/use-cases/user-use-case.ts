@@ -65,7 +65,7 @@ export class UserUseCase {
     }
 
     async loginUser(email: string, password: string) {
-        const user: any = await this.userRepository.findUserByEmail(email);
+        const user = await this.userRepository.findUserByEmail(email);
         if (!user) throw new Error("User doesn't exists");
         
         const comparePassword = await HashService.comparePassword(password, user.password)
@@ -76,5 +76,11 @@ export class UserUseCase {
         } else {
             return AuthService.generateToken(user.id, user.role);
         }  
+    }
+
+    async totalUsers() {
+        const users = await this.userRepository.totalUsers();
+
+        return users;
     }
 }

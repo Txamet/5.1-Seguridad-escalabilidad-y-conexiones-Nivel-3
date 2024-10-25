@@ -2,7 +2,7 @@
 @BASE_URL= http://localhost:3000
 
 ### Edit Authorization token in this line 
-@TOKEN = 
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImEwNzZjMTQzLWI0ZTctNDUwZS05ZDQ5LTJjZWMwZmNhMGMyZSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcyOTg3MzUzMCwiZXhwIjoxNzI5ODc3MTMwfQ.R8LAU3KjFMKCY1hiBVsD6xltAOLNL7JSY-HoR4nXAgg
 
 
 ### Edit userID in this line 
@@ -10,7 +10,7 @@
 
 
 ### Edit postID in this line 
-@POST_ID = 
+@POST_ID = 97a8491b-998a-43f9-a61b-592b984d4ab7
 
 
 ### Register a new user
@@ -58,7 +58,7 @@ Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
-  "name": "James"
+  "name": "Jaume editado"
 }
 
 
@@ -68,7 +68,7 @@ Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
-  "title": "Hola mundo 2!",
+  "title": "Hola mundo!",
   "content": "Hola mundo, me llamo Jaume Blanco González"
 }
 
@@ -79,8 +79,7 @@ Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
-  "title": "Hola mundo 2 editado!",
-  "content": "Hola mundo, me llamo Jaume Blanco González"
+  "title": "Hola mundo editado!"
 }
 
 
@@ -111,4 +110,14 @@ Authorization: Bearer {{TOKEN}}
 
 ### Get a post
 GET {{BASE_URL}}/posts/{{POST_ID}}
+Authorization: Bearer {{TOKEN}}
+
+
+### Like a post
+POST {{BASE_URL}}/posts/{{POST_ID}}/like
+Authorization: Bearer {{TOKEN}}
+
+
+### Determine a post popularity
+GET {{BASE_URL}}/posts/{{POST_ID}}/popularity
 Authorization: Bearer {{TOKEN}}

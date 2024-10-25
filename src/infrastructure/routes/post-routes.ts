@@ -21,4 +21,8 @@ router.get("/user/deleted", AuthMiddleware, PostController.getDeletedPostsByUser
 
 router.get("/:postId", AuthMiddleware, PostController.getPost);
 
+router.post("/:postId/like", AuthMiddleware, PostController.likePost);
+
+router.get("/:postId/popularity", AuthMiddleware, PostController.postPopularity);
+
 export default router

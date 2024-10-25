@@ -101,4 +101,33 @@ export class prismaPostModel implements PostRepository {
         const result = new PostValue(post.id, post.title, post.content, post.userId);
         return result;
     }
+
+    async likePost(userId: string, postId: string): Promise<void> {
+        const likedPost = await prisma.like.create({
+            data: {
+                userId: userId,
+                postId: postId
+            }
+        })
+    }
+
+    async totalLikesByPost(id: string): Promise<number | null> {
+        const totalLikes = await prisma.like.count({
+            where: { postId: id }
+        })
+
+        return totalLikes;
+    }
+
+    async findLike(userId: string, postId: string): Promise <boolean | null> {
+        const like = await prisma.like.findFirst({
+            where: {
+                userId: userId,
+                postId: postId
+            }
+        })
+
+        let result = (like) ? true : false;
+        return result
+    }
 }

@@ -11,4 +11,5 @@ export interface UserRepository {
     recoverUser(id: string): Promise<void>;
     getUsers(): Promise<UserEntity[]>;
     getFirstInList(limit: number): Promise<UserEntity[]>;
+    totalUsers(): Promise<number | null>
 }

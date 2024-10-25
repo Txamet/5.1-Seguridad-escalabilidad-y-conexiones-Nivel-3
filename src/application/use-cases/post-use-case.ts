@@ -51,4 +51,14 @@ export class PostUseCase {
 
         return post;
     }
+
+    async likePost(userId: string, postId: string) {
+        await this.postRepository.likePost(userId, postId);
+    }
+
+    async totalLikesByPost(id: string) {
+        const popularity = await this.postRepository.totalLikesByPost(id);
+
+        return popularity;
+    }
 }

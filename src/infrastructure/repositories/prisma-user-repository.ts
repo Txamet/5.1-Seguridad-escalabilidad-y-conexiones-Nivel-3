@@ -109,4 +109,12 @@ export class prismaUserModel implements UserRepository {
             data: { deleted: false }
         })
     }
+
+    async totalUsers(): Promise<number | null> {
+        const users = await prisma.user.count({
+            where: { deleted: false }
+        })
+
+        return users;
+    }
 }
