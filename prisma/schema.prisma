@@ -26,6 +26,7 @@ model User {
   role Role @default(simpleUser)
   deleted Boolean @default(false)
   posts Post[]
+  likes Like[]
 }
 
 model Post {
@@ -36,5 +37,14 @@ model Post {
   updatedAt DateTime @updatedAt
   deleted Boolean @default(false)
   userId String
+  user User @relation(fields: [userId], references: [id])
+  likes Like[]
+}
+
+model Like {
+  id Int @id @default(autoincrement())
+  postId String
+  userId String
+  post Post @relation(fields: [postId], references: [id])
   user User @relation(fields: [userId], references: [id])
 }

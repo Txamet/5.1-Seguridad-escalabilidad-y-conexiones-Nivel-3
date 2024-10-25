@@ -1,4 +1,3 @@
-import { v4 as uuid } from "uuid"
 import { PostEntity } from "../entities/post-entity";
 
 export class PostValue implements PostEntity {

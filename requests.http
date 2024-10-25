@@ -5,42 +5,55 @@
 @TOKEN = 
 
 
+### Edit userID in this line 
+@USER_ID = 
+
+
+### Edit postID in this line 
+@POST_ID = 
+
+
 ### Register a new user
 POST {{BASE_URL}}/users/register
 Content-Type: application/json
 
 {
   "name": "Jaume",  
-  "email": "jestuser@example.com",
+  "email": "testuser@example.com",
   "password": "password123"
 }
+
 
 ### Login a user to get a token
 POST {{BASE_URL}}/users/login
 Content-Type: application/json
 
 {
-  "email": "jestuser@example.com",
+  "email": "testuser@example.com",
   "password": "password123"
 }
+
 
 ### Get all users (requires authentication)
 GET {{BASE_URL}}/users
 Authorization: Bearer {{TOKEN}}
 
+
 ### Soft delete a user by ID (requires authentication)
 # Replace 'userId' with the actual user ID you want to delete
-DELETE {{BASE_URL}}/users/userId
+DELETE {{BASE_URL}}/users/{{USER_ID}}
 Authorization: Bearer {{TOKEN}}
+
 
 ### Restore a user by ID (requires authentication)
 # Replace 'userId' with the actual user ID you want to restore
-PATCH {{BASE_URL}}/users/userID/recover
+PATCH {{BASE_URL}}/users/{{USER_ID}}/recover
 Authorization: Bearer {{TOKEN}}
+
 
 ### Update user data
 # Replace 'userId' with the actual user ID you want to restore
-PUT {{BASE_URL}}/users/userId
+PUT {{BASE_URL}}/users/{{USER_ID}}
 Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
@@ -48,12 +61,54 @@ Content-Type: application/json
   "name": "James"
 }
 
+
 ### Create a post
-POST {{BASE_URL}}/posts/create-post
+POST {{BASE_URL}}/posts/create
 Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
-  "title": "Hola mundo!",
+  "title": "Hola mundo 2!",
   "content": "Hola mundo, me llamo Jaume Blanco González"
 }
+
+
+### Update a post
+PUT {{BASE_URL}}/posts/{{POST_ID}}
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "title": "Hola mundo 2 editado!",
+  "content": "Hola mundo, me llamo Jaume Blanco González"
+}
+
+
+### Delete a post
+DELETE {{BASE_URL}}/posts/{{POST_ID}}
+Authorization: Bearer {{TOKEN}}
+
+
+### Recover a post
+PATCH {{BASE_URL}}/posts/{{POST_ID}}/recover
+Authorization: Bearer {{TOKEN}}
+
+
+### Get all non-deleted posts
+GET {{BASE_URL}}/posts
+Authorization: Bearer {{TOKEN}}
+
+
+### Get all non-deleted posts of an user by ID
+GET {{BASE_URL}}/posts/user
+Authorization: Bearer {{TOKEN}}
+
+
+### Get all deleted posts of an user by ID
+GET {{BASE_URL}}/posts/user/deleted
+Authorization: Bearer {{TOKEN}}
+
+
+### Get a post
+GET {{BASE_URL}}/posts/{{POST_ID}}
+Authorization: Bearer {{TOKEN}}

@@ -34,8 +34,17 @@ export class UserUseCase {
         return user;
     }
 
-    async updateUser(id: string, {name, email, password, role}: {name: string, email: string, password: string, role: string}) {
-        const userValue = new UserValue(id, name, email, password, role);
+    async updateUser(id: string, data: any) {
+        let userValue;
+        
+        if (data.password) {
+            let passwordHash = await HashService.hashPassword(data.password);
+            userValue = new UserValue(id, data.name, data.email, passwordHash, data.role);
+
+        } else {
+            userValue = new UserValue(id, data.name, data.email, data.password, data.role);
+        }
+
         const user = await this.userRepository.updateUser(id, userValue);
         
         return user;
@@ -58,7 +67,7 @@ export class UserUseCase {
     async loginUser(email: string, password: string) {
         const user: any = await this.userRepository.findUserByEmail(email);
         if (!user) throw new Error("User doesn't exists");
-        console.log(user, user.id)
+        
         const comparePassword = await HashService.comparePassword(password, user.password)
 
         if (!comparePassword) {

@@ -46,5 +46,9 @@ export class PostUseCase {
         return posts;
     }
 
+    async getPost(id: string) {
+        const post = await this.postRepository.getPost(id);
 
+        return post;
+    }
 }

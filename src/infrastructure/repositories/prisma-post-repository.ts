@@ -68,6 +68,15 @@ export class prismaPostModel implements PostRepository {
         const result = await prisma.post.findMany({
             where: { deleted: false }
         });
+
+        return result;
+    }
+
+    async getPost(id: string): Promise<PostEntity | null> {
+        const result = await prisma.post.findFirst({
+            where: { id }
+        });
+
         return result;
     }
 
@@ -79,7 +88,7 @@ export class prismaPostModel implements PostRepository {
         if (!post) return null
 
         const result = new PostValue(post.id, post.title, post.content, post.userId);
-        return result
+        return result;
     }
 
     async findDeletedPostById(id: string): Promise<PostEntity | null> {
@@ -90,6 +99,6 @@ export class prismaPostModel implements PostRepository {
         if (!post) return null
         
         const result = new PostValue(post.id, post.title, post.content, post.userId);
-        return result
+        return result;
     }
 }

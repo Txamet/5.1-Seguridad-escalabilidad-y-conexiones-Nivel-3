@@ -56,8 +56,8 @@ export class UserController {
 
     static async updateUser(req: any, res: any) {
 
-        const { name, email, password } = req.body;
-        if(name == null || email == null || password == null) {
+        const user = req.body;
+        if(!user) {
             return res.status(400).json({error: "Invalid data format"});
         }
 
