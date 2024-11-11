@@ -43,14 +43,14 @@ export class PostController {
     static async createPost(req: any, res: any) {
         const { title, content } = req.body;
         const userId = req.user?.id;  
-        if (!title || !content) return res.status(400).json({ error: "Invalid data format" });
+        if (!title || !content) return res.status(422).json({ error: "Invalid data format" });
          
         try {
             const post = await postUseCase.createPost({ id: uuid(), title, content, userId });
             res.status(200).json(post);
 
         } catch (error) {
-            res.status(400).json({ error: "Error creating post" });
+            res.status(500).json({ error: "Error creating post" });
         }
     };
 
@@ -59,11 +59,11 @@ export class PostController {
         const postId = req.params.postId
         const userId = req.user?.id;
 
-        if(!postBody) return res.status(400).json({ error: "invalid data format" });
+        if(!postBody) return res.status(422).json({ error: "invalid data format" });
 
         const post = await postModel.findPostById(postId);
         if (!post) return res.status(404).json({ error: "Post doesn't exists" });
-        if (post?.userId !== userId) return res.status(400).json({ error: "user isn't authorized to update this post" })
+        if (post?.userId !== userId) return res.status(401).json({ error: "user isn't authorized to update this post" })
 
         try {
             const updatedPost = await postUseCase.updatePost(postId, postBody);
@@ -79,9 +79,9 @@ export class PostController {
         const userId = req.user?.id;
         const userRole = req.user?.role;
 
-        const post = await postModel.findPostById(postId);
+        const post = await postModel.findPostById(postId); 
         if (!post) return res.status(404).json({ error: "Post doesn't exists" });
-        if (post?.userId !== userId && userRole === "simpleUSer") return res.status(400).json({ error: "user isn't authorized to delete this post" });
+        if (post?.userId !== userId && userRole === "simpleUser") return res.status(401).json({ error: "user isn't authorized to delete this post" });
         
         
         try {
@@ -100,7 +100,7 @@ export class PostController {
 
         const post = await postModel.findDeletedPostById(postId);
         if (!post) return res.status(404).json({ error: "Post doesn't exists" });
-        if (post?.userId !== userId && userRole === "simpleUSer") return res.status(400).json({ error: "user isn't authorized to recover this post" });
+        if (post?.userId !== userId && userRole === "simpleUser") return res.status(401).json({ error: "user isn't authorized to recover this post" });
 
         try {
             const recoveredPost = await postUseCase.recoverPost(postId);
@@ -117,7 +117,7 @@ export class PostController {
         try {
             const posts = await postUseCase.getPostsByUser(userId);
 
-            if (posts.length === 0) return res.status(200).json("User doesn't have any posts")
+            if (posts.length === 0) return res.status(204).json({ success: "User doesn't have any posts"})
 
             const result = await postComposition(posts);     
             res.status(200).json(result);
@@ -133,7 +133,7 @@ export class PostController {
         try {
             const posts = await postUseCase.getDeletedPostsByUser(userId);
 
-            if (posts.length === 0) return res.status(200).json("User doesn't have any deleted posts");
+            if (posts.length === 0) return res.status(200).json({ success: "User doesn't have any deleted posts"});
 
             const result = await postComposition(posts);    
             res.status(200).json(result);
@@ -146,11 +146,9 @@ export class PostController {
     static async getAllPosts(req: any, res: any) {
         try {
             const posts = await postUseCase.getAllPosts();
-            if (posts.length === 0) return res.status(200).json({success: "The posts list is empty"}); 
+            if (posts.length === 0) return res.status(204).json({ success: "The posts list is empty"}); 
 
-            const result = await postComposition(posts);
-            //if (posts === null) return res.status(200).json({success: "The posts list is empty"}); 
-            
+            const result = await postComposition(posts);    
             res.status(200).json(result);
 
         } catch (error) {
@@ -183,14 +181,14 @@ export class PostController {
 
         const post = await postModel.findPostById(postId);
         if (!post) return res.status(404).json({ error: "Post doesn't exists" });
-        if (post?.userId === userId) return res.status(401).json("User isn't authorized to like his own post");
+        if (post?.userId === userId) return res.status(401).json({ success: "User isn't authorized to like his own post"});
 
         const findLike = await postModel.findLike(userId, postId);
-        if(findLike) return res.status(400).json("User already liked this post once.")
+        if(findLike) return res.status(409).json({ success: "User already liked this post once."})
 
         try {
             const like = await postUseCase.likePost(userId, postId);
-            res.status(200).json({success: "Post liked"})
+            res.status(200).json({ success: "Post liked"})
 
         } catch (error) {
             res.status(500).json({ error: "Error retrieving data" })

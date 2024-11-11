@@ -29,14 +29,14 @@ export class UserController {
     */
     static async createUser(req: any, res: any) {
         const { name, email, password } = req.body;
-        if(name == null || email == null || password == null) {
-            return res.status(400).json({error: "Invalid data format"});
+        if(!name || !email || !password) {
+            return res.status(422).json({error: "Invalid data format"});
         }
 
         try {
             const findUser = await userModel.findUserByEmail(email);
             if (findUser) {
-                return res.status(400).json({ error: "User already exists" })
+                return res.status(409).json({ error: "User already exists" })
             }
 
             const totalUsers = await userUseCase.getFirstInList(1);
@@ -59,13 +59,13 @@ export class UserController {
 
         const user = req.body;
         if(!user) {
-            return res.status(400).json({error: "Invalid data format"});
+            return res.status(422).json({error: "Invalid data format"});
         }
 
         try {
             const findUser = await userModel.findUserById(req.params.userId);
             if (!findUser) {
-                return res.status(400).json({ error: "User doesn't exists" })
+                return res.status(404).json({ error: "User doesn't exists" })
             }
 
             const updatedUser = await userUseCase.updateUser(req.params.userId, req.body);
@@ -136,7 +136,7 @@ export class UserController {
     static async loginUser(req: any, res: any) {
         const { email, password } = req.body; 
 
-        if (!email || !password) return res.status(400).json({error: "Invalid format data"});
+        if (!email || !password) return res.status(422).json({error: "Invalid format data"});
 
         try {
             const user = await userModel.findUserByEmail(email);
@@ -147,10 +147,16 @@ export class UserController {
             const id = user.id;
 
             const token = await userUseCase.loginUser(email, password);
-            res.json({id, name, email, role, token})
+
+            if (token === "Invalid credentials")  {
+                res.status(401).json({error: token})
+
+            } else {
+                res.status(200).json({id, name, email, role, token})
+            }
 
         } catch (error: any) {
-            res.status(500).send(error.message)
+            res.status(500).json({ error: "Error retrieving user" })
         }
     }
 }
