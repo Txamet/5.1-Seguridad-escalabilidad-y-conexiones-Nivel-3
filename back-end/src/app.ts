@@ -23,8 +23,7 @@ app.use(cors({
   credentials: true,
 }));
 
-export const BASE_URL = `http://localhost:${PORT}`;
-//module.exports={BASE_URL}
+const BASE_URL = `http://localhost:${PORT}`;
 
 export const server = app.listen(PORT,()=>
   console.log(`Server ready at: ${BASE_URL}`)

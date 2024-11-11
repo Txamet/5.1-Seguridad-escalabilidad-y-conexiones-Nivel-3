@@ -19,9 +19,9 @@ const postPopularity = async (id: string) => {
     const totalUsers = await userUseCase.totalUsers();
     
     if(!totalLikes || !totalUsers) {
-        postPopularity = "0";
+        postPopularity = 0;
     } else {
-        postPopularity = String(((totalLikes / (totalUsers - 1)) * 100).toFixed(2));
+        postPopularity = Number(((totalLikes / (totalUsers - 1)) * 100).toFixed(2));
     }
 
     return postPopularity;
@@ -156,6 +156,23 @@ export class PostController {
         }
     }
 
+/*      
+    static async getAllPosts(req: any, res: any) {
+        try {
+            const sortBy = req.query.sortBy as string || "date";
+            const searchTerm = req.query.searchTerm as string || "";
+
+            const posts = await postUseCase.getAllPosts(sortBy, searchTerm);
+            if (posts.length === 0) return res.status(204).json({ success: "The posts list is empty"}); 
+
+            const result = await postComposition(posts);    
+            res.status(200).json(result);
+
+        } catch (error) {
+            res.status(500).json({ error: "Error retrieving data" })
+        }
+    }
+*/
     static async getPost(req: any, res: any) {
         const postId = req.params.postId;
 

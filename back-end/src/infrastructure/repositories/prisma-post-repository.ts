@@ -75,6 +75,26 @@ export class prismaPostModel implements PostRepository {
         return result;
     }
 
+/*
+    async getAllPosts(sortBy: string = "date", searchTerm: string = ""): Promise<PostEntity[]> {
+        const result = await prisma.post.findMany({
+            where: { deleted: false },
+            orderBy:
+                sortBy === "popularity_asc"
+                ? { popularity: "asc" }
+                : sortBy === 'popularity_desc'
+                ? { popularity: 'desc' }
+                : sortBy === 'author_az'
+                ? { author: { name: 'asc' } }
+                : sortBy === 'author_za'
+                ? { author: { name: 'desc' } }
+                : { createdAt: 'desc' }
+        
+        });
+
+        return result;
+    }
+*/
     async getPost(id: string): Promise<PostEntity | null> {
         const result = await prisma.post.findFirst({
             where: { id }

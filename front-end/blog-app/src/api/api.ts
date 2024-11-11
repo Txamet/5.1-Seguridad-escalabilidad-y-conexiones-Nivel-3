@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const PORT = import.meta.env.VITE_PORT
+
 const api = axios.create({
-  baseURL: "http://localhost:3000"//process.env.REACT_APP_API_URL,
+  baseURL: `http://localhost:${PORT}`
 });
 
 api.interceptors.request.use((config) => {

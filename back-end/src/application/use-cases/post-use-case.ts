@@ -45,7 +45,13 @@ export class PostUseCase {
 
         return posts;
     }
+/*   
+    async getAllPosts(sortBy: string, searchTerm: string) {
+        const posts = await this.postRepository.getAllPosts(sortBy, searchTerm);
 
+        return posts;
+    }
+*/
     async getPost(id: string) {
         const post = await this.postRepository.getPost(id);
 
