@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run resetdb:test && jest app.test.ts",
+    "resetdb:test": "npx prisma db push --schema=prisma/schema.test.prisma --force-reset",
+    "api": "npx prisma db push --schema=prisma/schema.prisma && node ./dist/app.js",
     "dev": "node ./dist/app.js"
   },
   "keywords": [],
@@ -16,6 +18,7 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.13",
     "@types/jsonwebtoken": "^9.0.7",
+    "@types/supertest": "^6.0.2",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.7",
     "@types/uuid": "^10.0.0",

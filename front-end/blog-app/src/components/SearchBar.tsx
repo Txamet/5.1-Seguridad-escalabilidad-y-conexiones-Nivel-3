@@ -18,7 +18,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
       type="text"
       value={input}
       onChange={(e) => setInput(e.target.value)}
-      placeholder="Cerca publicacions..."
+      placeholder="Search post title..."
     />
   );
 };

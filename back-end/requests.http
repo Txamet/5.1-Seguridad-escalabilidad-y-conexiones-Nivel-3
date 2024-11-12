@@ -2,15 +2,14 @@
 @BASE_URL= http://localhost:3000
 
 ### Edit Authorization token in this line 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImEwNzZjMTQzLWI0ZTctNDUwZS05ZDQ5LTJjZWMwZmNhMGMyZSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczMTIzOTI1NSwiZXhwIjoxNzMxMjQyODU1fQ.KYWJM8p_4l1rklf_o5rIrFC48-rUI3jbNRTlhwLUJuM
-
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlMzk5MjA1LWNlODAtNGU2Zi04MDAyLTE5OTUzNjEwZTIyNyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczMTQxMTQzMiwiZXhwIjoxNzMxNDE1MDMyfQ.ri_j0xdd0YvNmVsAnsdtMEewZiYj0BNZnkDUdUcskik
 
 ### Edit userID in this line 
-@USER_ID = a076c143-b4e7-450e-9d49-2cec0fca0c2e
+@USER_ID = 4e399205-ce80-4e6f-8002-19953610e227
 
 
 ### Edit postID in this line 
-@POST_ID = 00472e0d-e737-433a-ad4e-14448a8b8dae
+@POST_ID = 
 
 
 ### Register a new user
@@ -58,7 +57,9 @@ Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
-  "name": "Jaume editado"
+  "name": "Jaume editado",
+  "email": "jaume@email.com",
+  "password": "jaume"
 }
 
 

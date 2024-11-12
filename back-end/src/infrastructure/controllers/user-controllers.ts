@@ -6,27 +6,6 @@ const userModel = new prismaUserModel();
 const userUseCase = new UserUseCase(userModel)
 
 export class UserController {
-    /*
-    static async createAdmin(req: any, res: any) {
-        const { name, email, password } = req.body;
-        if(name == null || email == null || password == null) {
-            return res.status(400).json({error: "Invalid data format"});
-        }
-
-        try {
-            const findUser = await userModel.findUserByEmail(email);
-            if (findUser) {
-                return res.status(400).json({ error: "Admin already exists" })
-            }
-
-            const newAdmin = await userUseCase.registerAdmin({ id: uuid(), name, email, password });
-            res.status(200).json(newAdmin)
-
-        } catch (error) {
-            res.status(500).json({ error: "Error retrieving admin" })
-        }
-    };
-    */
     static async createUser(req: any, res: any) {
         const { name, email, password } = req.body;
         if(!name || !email || !password) {
@@ -56,19 +35,18 @@ export class UserController {
     };
 
     static async updateUser(req: any, res: any) {
-
-        const user = req.body;
-        if(!user) {
+        const { name, email, password } = req.body;
+        if(!name || !email) {
             return res.status(422).json({error: "Invalid data format"});
         }
 
         try {
             const findUser = await userModel.findUserById(req.params.userId);
             if (!findUser) {
-                return res.status(404).json({ error: "User doesn't exists" })
+                return res.status(404).json({ error: "User not found" })
             }
 
-            const updatedUser = await userUseCase.updateUser(req.params.userId, req.body);
+            const updatedUser = await userUseCase.updateUser(req.params.userId, { name, email, password });
             res.status(200).json(updatedUser)
 
         } catch (error) {
@@ -79,8 +57,9 @@ export class UserController {
     static async deleteUser(req: any, res: any) {
         try {
             const findUser = await userModel.findUserById(req.params.userId);
-            if (!findUser) {
-                return res.status(404).json({ error: "User doesn't exists" })
+            console.log(findUser)
+            if (findUser === null) {
+                return res.status(404).json({ error: "User not found" })
             }
     
             await userUseCase.deleteUser(req.params.userId);
