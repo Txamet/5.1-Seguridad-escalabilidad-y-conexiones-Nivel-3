@@ -57,13 +57,12 @@ export class UserController {
     static async deleteUser(req: any, res: any) {
         try {
             const findUser = await userModel.findUserById(req.params.userId);
-            console.log(findUser)
             if (findUser === null) {
                 return res.status(404).json({ error: "User not found" })
             }
     
             await userUseCase.deleteUser(req.params.userId);
-            res.status(200).json("User deleted")
+            res.status(200).json({ message: "User deleted"})
     
     
         } catch (error) {
@@ -74,7 +73,7 @@ export class UserController {
     static async recoverUser(req: any, res: any) {
         try {
             const searchUserById = await userModel.findDeletedUserById(req.params.userId);
-            if (!searchUserById) return res.status(404).json({error: "User not found"});
+            if (!searchUserById) return res.status(404).json({ error: "User not found" });
     
             const searchUserByEmail = await userModel.findUserByEmail(searchUserById.email);
             if (searchUserByEmail) return res.status(409).json({error: "User already exists with another userId"});

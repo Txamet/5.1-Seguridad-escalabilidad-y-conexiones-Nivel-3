@@ -59,11 +59,11 @@ export class PostController {
         const postId = req.params.postId
         const userId = req.user?.id;
 
-        if(!postBody) return res.status(422).json({ error: "invalid data format" });
+        if(!postBody.title || !postBody.content) return res.status(422).json({ error: "invalid data format" });
 
         const post = await postModel.findPostById(postId);
         if (!post) return res.status(404).json({ error: "Post doesn't exists" });
-        if (post?.userId !== userId) return res.status(401).json({ error: "user isn't authorized to update this post" })
+        if (post?.userId !== userId) return res.status(401).json({ error: "User isn't authorized to update this post" })
 
         try {
             const updatedPost = await postUseCase.updatePost(postId, postBody);
@@ -81,7 +81,7 @@ export class PostController {
 
         const post = await postModel.findPostById(postId); 
         if (!post) return res.status(404).json({ error: "Post doesn't exists" });
-        if (post?.userId !== userId && userRole === "simpleUser") return res.status(401).json({ error: "user isn't authorized to delete this post" });
+        if (post?.userId !== userId && userRole === "simpleUser") return res.status(401).json({ error: "User isn't authorized to delete this post" });
         
         
         try {
@@ -132,8 +132,8 @@ export class PostController {
 
         try {
             const posts = await postUseCase.getDeletedPostsByUser(userId);
-
-            if (posts.length === 0) return res.status(200).json({ success: "User doesn't have any deleted posts"});
+            
+            if (posts.length === 0) return res.status(204).json({ success: "User doesn't have any deleted posts"});
 
             const result = await postComposition(posts);    
             res.status(200).json(result);
@@ -156,23 +156,6 @@ export class PostController {
         }
     }
 
-/*      
-    static async getAllPosts(req: any, res: any) {
-        try {
-            const sortBy = req.query.sortBy as string || "date";
-            const searchTerm = req.query.searchTerm as string || "";
-
-            const posts = await postUseCase.getAllPosts(sortBy, searchTerm);
-            if (posts.length === 0) return res.status(204).json({ success: "The posts list is empty"}); 
-
-            const result = await postComposition(posts);    
-            res.status(200).json(result);
-
-        } catch (error) {
-            res.status(500).json({ error: "Error retrieving data" })
-        }
-    }
-*/
     static async getPost(req: any, res: any) {
         const postId = req.params.postId;
 
