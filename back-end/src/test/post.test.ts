@@ -57,7 +57,7 @@ describe("POST/posts/create", () => {
             "content": null
         });
         expect(response.statusCode).toBe(422);
-        expect(response.body).toEqual({ error: "Invalid data format" })
+        expect(response.body).toEqual({ message: "Invalid data format" })
     });
 });
 
@@ -83,7 +83,7 @@ describe("PUT/posts/:postId", () => {
             "content": "Este es un post de prueba y creado para testing"
         });                                              
         expect(response.statusCode).toBe(401);
-        expect(response.body).toEqual({ error: "User isn't authorized to update this post" });
+        expect(response.body).toEqual({ message: "User isn't authorized to update this post" });
     });
 
     test("should respond with a 404 status code when a post doesn't exists", async () => {
@@ -92,7 +92,7 @@ describe("PUT/posts/:postId", () => {
             "content": "Este es un post de prueba y creado para testing"
         });
         expect(response.statusCode).toBe(404);
-        expect(response.body).toEqual({ error: "Post doesn't exists" });
+        expect(response.body).toEqual({ message: "Post doesn't exists" });
     });
 
     test("should respond with a 422 status code when data format is invalid", async () => {
@@ -101,7 +101,7 @@ describe("PUT/posts/:postId", () => {
             "content": "Este es otro post de prueba y creado para testing"
         });
         expect(response.statusCode).toBe(422);
-        expect(response.body).toEqual({ error: "invalid data format" });
+        expect(response.body).toEqual({ message: "invalid data format" });
     });
 });
 
@@ -109,13 +109,13 @@ describe("DELETE/posts/:postId", () =>{
     test("should respond with a 401 status code when an user isn`t authorized to delete another user post", async () => {
         const response = await request(app).delete(`/posts/${postId}`).set("Authorization", `Bearer ${token2}`).send();
         expect(response.statusCode).toBe(401);
-        expect(response.body).toEqual({ error: "User isn't authorized to delete this post" });
+        expect(response.body).toEqual({ message: "User isn't authorized to delete this post" });
     });
 
     test("should respond with a 200 status code when a post is deleted succesfully", async () => {
         const response = await request(app).delete(`/posts/${postId}`).set("Authorization", `Bearer ${token}`).send();
         expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual({success: "Post deleted"})
+        expect(response.body).toEqual({message: "Post deleted"})
     });
 
     test("should respond with a 401 status code when access token is missing", async () => {
@@ -127,7 +127,7 @@ describe("DELETE/posts/:postId", () =>{
     test("should respond with 404 status code when a post doesn`t exists", async () => {
         const response = await request(app).delete(`/posts/xxxx`).set("Authorization", `Bearer ${token}`).send();
         expect(response.statusCode).toBe(404);
-        expect(response.body).toEqual({ error: "Post doesn't exists" });
+        expect(response.body).toEqual({ message: "Post doesn't exists" });
     }); 
 });
 
@@ -135,13 +135,13 @@ describe("PATCH/posts/:postId/recover", () => {
     test("should respond with a 401 status code when an user isn`t authorized to recover another user post", async () => {
         const response = await request(app).patch(`/posts/${postId}/recover`).set("Authorization", `Bearer ${token2}`).send();
         expect(response.statusCode).toBe(401);
-        expect(response.body).toEqual({ error: "user isn't authorized to recover this post" });
+        expect(response.body).toEqual({ message: "user isn't authorized to recover this post" });
     });
 
     test("should respond with a 200 status code when a deleted post is recovered succesfully", async () => {
         const response = await request(app).patch(`/posts/${postId}/recover`).set("Authorization", `Bearer ${token}`).send();
         expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual({success: "Post recovered"});
+        expect(response.body).toEqual({message: "Post recovered"});
     });
 
     test("should respond with a 401 status code when access token is missing", async () => {
@@ -153,7 +153,7 @@ describe("PATCH/posts/:postId/recover", () => {
     test("should respond with a 404 status code when a post doesn`t exists", async () => {
         const response = await request(app).patch(`/posts/xxxx/recover`).set("Authorization", `Bearer ${token}`).send();
         expect(response.statusCode).toBe(404);
-        expect(response.body).toEqual({ error: "Post doesn't exists" });
+        expect(response.body).toEqual({ message: "Post doesn't exists" });
     });
 });
 
@@ -222,7 +222,7 @@ describe("GET/posts/:postId", () => {
     test("should respond with a 404 status code when a post doesn't exists", async () => {
         const response = await request(app).get(`/posts/xxxxx`).set("Authorization", `Bearer ${token}`).send();
         expect(response.statusCode).toBe(404);
-        expect(response.body).toEqual({ error: "Post doesn't exists" });
+        expect(response.body).toEqual({ message: "Post doesn't exists" });
     });
 });
 
@@ -230,7 +230,7 @@ describe("POST/posts/:postId/like", () => {
     test("should respond with a 200 status code when a post is liked", async () => {
         const response = await request(app).post(`/posts/${postId}/like`).set("Authorization", `Bearer ${token2}`).send();
         expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual({ success: "Post liked"});
+        expect(response.body).toEqual({ message: "Post liked"});
     });
 
     test("should respond with a 401 status code when access token is missing", async () => {
@@ -242,18 +242,18 @@ describe("POST/posts/:postId/like", () => {
     test("should respond with a 401 status code when an user tries to like his own post", async () => {
         const response = await request(app).post(`/posts/${postId}/like`).set("Authorization", `Bearer ${token}`).send();
         expect(response.statusCode).toBe(401);
-        expect(response.body).toEqual({ success: "User isn't authorized to like his own post"});
+        expect(response.body).toEqual({ message: "User isn't authorized to like his own post"});
     });
 
     test("should respond with a 404 status code when the post doesn't exists", async () => {
         const response = await request(app).post(`/posts/xxxx/like`).set("Authorization", `Bearer ${token2}`).send();
         expect(response.statusCode).toBe(404);
-        expect(response.body).toEqual({ error: "Post doesn't exists" });
+        expect(response.body).toEqual({ message: "Post doesn't exists" });
     });
 
     test("should respond with a 409 status code when an user tries to like a post that he already likes it before", async () => {
         const response = await request(app).post(`/posts/${postId}/like`).set("Authorization", `Bearer ${token2}`).send();
         expect(response.statusCode).toBe(409);
-        expect(response.body).toEqual({ success: "User already liked this post once."});
+        expect(response.body).toEqual({ message: "User already liked this post once."});
     })
 })

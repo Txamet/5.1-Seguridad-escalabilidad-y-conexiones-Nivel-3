@@ -46,6 +46,7 @@ describe("PUT/users/:userId", () => {
             "name" : "Jaume"
         })                                               
         expect(response.statusCode).toBe(401);
+        expect(response.body).toEqual({ message: 'Access token is missing' });
     });
 
     test("should respond with a 404 status code when user doesn't exist", async () => {
@@ -55,7 +56,7 @@ describe("PUT/users/:userId", () => {
             "password": "jaume"
         });
         expect(response.statusCode).toBe(404);
-        expect(response.body).toEqual({ error: "User not found" });
+        expect(response.body).toEqual({ message: "User not found" });
     });
 
     test("should respond with a 422 status code when data format is invalid", async () => {
@@ -65,7 +66,7 @@ describe("PUT/users/:userId", () => {
             "password": "jaume"
         })                                             
         expect(response.statusCode).toBe(422);
-        expect(response.body).toEqual({error: "Invalid data format"})
+        expect(response.body).toEqual({message: "Invalid data format"})
     });
 })
 
@@ -91,7 +92,7 @@ describe("DELETE/users/:userId", () => {
     test("should respond with a 404 status code when user is not found", async () => {
         const response = await request(app).delete(`/users/xxx`).set("Authorization", `Bearer ${token}`).send();
         expect(response.statusCode).toBe(404);
-        expect(response.body).toEqual({ error: "User not found" })
+        expect(response.body).toEqual({ message: "User not found" })
     });
 });
 
@@ -99,7 +100,7 @@ describe("PATCH/users/:userId/recover", () => {
     test("should respond with a 200 status code when user is recovered succesfully", async () => {
         const response = await request(app).patch(`/users/${userId2}/recover`).set("Authorization", `Bearer ${token}`).send();
         expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual({success: "User recovered"})
+        expect(response.body).toEqual({message: "User recovered"})
     });
 
     test("should respond with a 401 status code when token is missing", async () => {
@@ -117,7 +118,7 @@ describe("PATCH/users/:userId/recover", () => {
     test("should respond with a 404 status code when user is not found", async () => {
         const response = await request(app).patch(`/users/xxx/recover`).set("Authorization", `Bearer ${token}`).send();
         expect(response.statusCode).toBe(404);
-        expect(response.body).toEqual({ error: "User not found" })
+        expect(response.body).toEqual({ message: "User not found" })
     });
 
     test("should respond with a 409 status is user already exists with another userId", async () => {
@@ -135,7 +136,7 @@ describe("PATCH/users/:userId/recover", () => {
 
         const response = await request(app).patch(`/users/${userId2}/recover`).set("Authorization", `Bearer ${token}`).send();
         expect(response.statusCode).toBe(409);
-        expect(response.body).toEqual({error: "User already exists with another userId"})
+        expect(response.body).toEqual({message: "User already exists with another userId"})
     });
 });
 

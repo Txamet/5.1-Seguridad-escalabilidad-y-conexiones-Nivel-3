@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -19,6 +22,11 @@ const Login: React.FC = () => {
       navigate('/posts');
 
     } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        alert(`Error: ${error.response.data.message}`);
+      } else {
+        alert('Unkown error');
+      }
       console.error(error);
     }
   };
@@ -35,7 +43,7 @@ const Login: React.FC = () => {
     </form>
 
     <div className='toRegister'>
-      <p>New user? Register <a href="http://localhost:5173/register"><u>here</u></a></p>
+      <p>New user? Register <Link to={"/register"}><u>here</u></Link></p>
     </div>
     </>
   );

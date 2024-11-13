@@ -9,13 +9,13 @@ export class UserController {
     static async createUser(req: any, res: any) {
         const { name, email, password } = req.body;
         if(!name || !email || !password) {
-            return res.status(422).json({error: "Invalid data format"});
+            return res.status(422).json({message: "Invalid data format"});
         }
 
         try {
             const findUser = await userModel.findUserByEmail(email);
             if (findUser) {
-                return res.status(409).json({ error: "User already exists" })
+                return res.status(409).json({ message: "User already exists" })
             }
 
             const totalUsers = await userUseCase.getFirstInList(1);
@@ -37,20 +37,20 @@ export class UserController {
     static async updateUser(req: any, res: any) {
         const { name, email, password } = req.body;
         if(!name || !email) {
-            return res.status(422).json({error: "Invalid data format"});
+            return res.status(422).json({message: "Invalid data format"});
         }
 
         try {
             const findUser = await userModel.findUserById(req.params.userId);
             if (!findUser) {
-                return res.status(404).json({ error: "User not found" })
+                return res.status(404).json({ message: "User not found" })
             }
 
             const updatedUser = await userUseCase.updateUser(req.params.userId, { name, email, password });
             res.status(200).json(updatedUser)
 
         } catch (error) {
-            res.status(500).json({ error: "Error retrieving user" })
+            res.status(500).json({ message: "Error retrieving user" })
         }
     };
 
@@ -58,7 +58,7 @@ export class UserController {
         try {
             const findUser = await userModel.findUserById(req.params.userId);
             if (findUser === null) {
-                return res.status(404).json({ error: "User not found" })
+                return res.status(404).json({ message: "User not found" })
             }
     
             await userUseCase.deleteUser(req.params.userId);
@@ -66,23 +66,23 @@ export class UserController {
     
     
         } catch (error) {
-            res.status(500).json({ error: "Error retrieving user" })
+            res.status(500).json({ message: "Error retrieving user" })
         }
     }
 
     static async recoverUser(req: any, res: any) {
         try {
             const searchUserById = await userModel.findDeletedUserById(req.params.userId);
-            if (!searchUserById) return res.status(404).json({ error: "User not found" });
+            if (!searchUserById) return res.status(404).json({ message: "User not found" });
     
             const searchUserByEmail = await userModel.findUserByEmail(searchUserById.email);
-            if (searchUserByEmail) return res.status(409).json({error: "User already exists with another userId"});
+            if (searchUserByEmail) return res.status(409).json({message: "User already exists with another userId"});
         
             await userUseCase.recoverUser(req.params.userId);
-            res.status(200).json({success: "User recovered"}); 
+            res.status(200).json({message: "User recovered"}); 
     
         } catch (error) {
-            res.status(500).json({error: "Error retrieving user"});
+            res.status(500).json({message: "Error retrieving user"});
         }
     }
 
@@ -97,7 +97,7 @@ export class UserController {
                 res.status(200).json(showUsers);     
             }
         } catch (error) {
-            res.status(500).json({ error: "Error retrieving user" })
+            res.status(500).json({ message: "Error retrieving user" })
         }
     }
 
@@ -107,18 +107,18 @@ export class UserController {
             res.status(200).json(user)
             
         } catch (error) {
-            res.status(500).json({ error: "Error retrieving user" })
+            res.status(500).json({ message: "Error retrieving user" })
         }
     }
 
     static async loginUser(req: any, res: any) {
         const { email, password } = req.body; 
 
-        if (!email || !password) return res.status(422).json({error: "Invalid format data"});
+        if (!email || !password) return res.status(422).json({message: "Invalid format data"});
 
         try {
             const user = await userModel.findUserByEmail(email);
-            if (!user) return res.status(404).json({error: "User not found"})
+            if (!user) return res.status(404).json({message: "User not found"})
 
             const name = user.name; 
             const role = user.role;   
@@ -127,14 +127,14 @@ export class UserController {
             const token = await userUseCase.loginUser(email, password);
 
             if (token === "Invalid credentials")  {
-                res.status(401).json({error: token})
+                res.status(401).json({message: token})
 
             } else {
                 res.status(200).json({id, name, email, role, token})
             }
 
         } catch (error: any) {
-            res.status(500).json({ error: "Error retrieving user" })
+            res.status(500).json({ message: "Error retrieving user" })
         }
     }
 }

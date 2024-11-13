@@ -35,7 +35,7 @@ describe("POST/users/register", () => {
             "password": "jaume"
         });
         expect(response.statusCode).toBe(409);
-        expect(response.body).toEqual({ error: "User already exists" });
+        expect(response.body).toEqual({ message: "User already exists" });
     });
 
     test("should respond with a 422 status code when data format is invalid", async () => {
@@ -45,7 +45,7 @@ describe("POST/users/register", () => {
             "password": "jaume"
         });
         expect(response.statusCode).toBe(422);
-        expect(response.body).toEqual({ error: "Invalid data format" });
+        expect(response.body).toEqual({ message: "Invalid data format" });
     });
 });
 
@@ -65,7 +65,7 @@ describe("POST/users/login", () => {
             "password": "pepito"
         });
         expect(response.statusCode).toBe(401);
-        expect(response.body).toEqual({ error: "Invalid credentials" });
+        expect(response.body).toEqual({ message: "Invalid credentials" });
     });
 
     test("should respond with a 404 status code when user doesn`t exists", async () => {
@@ -74,7 +74,7 @@ describe("POST/users/login", () => {
             "password": "pepito"
         });
         expect(response.statusCode).toBe(404);
-        expect(response.body).toEqual({ error: "User not found" });
+        expect(response.body).toEqual({ message: "User not found" });
     });
 
     test("should respond with a 422 status code when data format is invalid", async () => {
@@ -82,7 +82,7 @@ describe("POST/users/login", () => {
             "email": "jaume@email.com"
         });
         expect(response.statusCode).toBe(422);
-        expect(response.body).toEqual({ error: "Invalid format data" });
+        expect(response.body).toEqual({ message: "Invalid format data" });
     });
 });
 
