@@ -82,6 +82,8 @@ const Profile: React.FC = () => {
   return (
     <>
       <Navbar /> 
+      <div className='form'>
+      <h2>Profile</h2>
       <div className='box'>
         <p>Name: {user.name}</p>
         <p>Email: {user.email}</p>
@@ -117,6 +119,7 @@ const Profile: React.FC = () => {
             <button type = "submit">View {user.name} deleted posts</button>
           </Link>
         </div>)}  
+      </div>
     </>
   );
 };

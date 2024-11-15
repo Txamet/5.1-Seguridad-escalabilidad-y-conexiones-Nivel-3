@@ -3,7 +3,6 @@ import { PostUseCase } from "../../application/use-cases/post-use-case";
 import { v4 as uuid } from "uuid"
 import { prismaUserModel } from "../repositories/prisma-user-repository"
 import { UserUseCase } from "../../application/use-cases/user-use-case";
-import { PostEntity } from "../../domain/entities/post-entity";
 
 const userModel = new prismaUserModel();
 const userUseCase = new UserUseCase(userModel)

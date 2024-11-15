@@ -52,18 +52,34 @@ describe("PUT/users/:userId", () => {
     test("should respond with a 404 status code when user doesn't exist", async () => {
         const response = await request(app).put(`/users/xxxx`).set("Authorization", `Bearer ${token}`).send({
             "name": "James",
-            "email": "jaume@email.com",
-            "password": "jaume"
+            "email": "jaume@email.com"
         });
         expect(response.statusCode).toBe(404);
         expect(response.body).toEqual({ message: "User not found" });
     });
 
+    test("should respond with a 409 status code when name is already in use", async () => {
+        const response = await request(app).put(`/users/${userId}`).set("Authorization", `Bearer ${token}`).send({
+            "name": "Pepito",
+            "email": "jaume@email.com"
+        });
+        expect(response.statusCode).toBe(409);
+        expect(response.body).toEqual({ message: "This name is already in use" });
+    });
+
+    test("should respond with a 409 status code when email is already in use", async () => {
+        const response = await request(app).put(`/users/${userId}`).set("Authorization", `Bearer ${token}`).send({
+            "name": "Jaume",
+            "email": "pepito@email.com"
+        });
+        expect(response.statusCode).toBe(409);
+        expect(response.body).toEqual({ message: "This email is already in use" });
+    });
+
     test("should respond with a 422 status code when data format is invalid", async () => {
         const response = await request(app).put(`/users/${userId}`).set("Authorization", `Bearer ${token}`).send({
             "name": null,
-            "email": "jaume@email.com",
-            "password": "jaume"
+            "email": "jaume@email.com"
         })                                             
         expect(response.statusCode).toBe(422);
         expect(response.body).toEqual({message: "Invalid data format"})
@@ -74,7 +90,7 @@ describe("DELETE/users/:userId", () => {
     test("should respond with a 200 status code when user is deleted succesfully", async () => {
         const response = await request(app).delete(`/users/${userId2}`).set("Authorization", `Bearer ${token}`).send();
         expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual({ message: "User deleted"})
+        expect(response.body).toEqual({ message: "User banned"})
     });
 
     test("should respond with a 401 status code when token is missing", async () => {
@@ -100,7 +116,7 @@ describe("PATCH/users/:userId/recover", () => {
     test("should respond with a 200 status code when user is recovered succesfully", async () => {
         const response = await request(app).patch(`/users/${userId2}/recover`).set("Authorization", `Bearer ${token}`).send();
         expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual({message: "User recovered"})
+        expect(response.body).toEqual({message: "User unbanned"})
     });
 
     test("should respond with a 401 status code when token is missing", async () => {
@@ -124,7 +140,7 @@ describe("PATCH/users/:userId/recover", () => {
     test("should respond with a 409 status is user already exists with another userId", async () => {
         const deletedUser = await request(app).delete(`/users/${userId2}`).set("Authorization", `Bearer ${token}`).send();
         const createUser = await request(app).post("/users/register").send({
-            "name": "Pepito",
+            "name": "Jose",
             "email": "pepito@email.com",
             "password": "pepito"
         });

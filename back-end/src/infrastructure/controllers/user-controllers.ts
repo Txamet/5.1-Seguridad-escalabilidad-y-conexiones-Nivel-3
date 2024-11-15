@@ -13,9 +13,14 @@ export class UserController {
         }
 
         try {
-            const findUser = await userModel.findUserByEmail(email);
-            if (findUser) {
-                return res.status(409).json({ message: "User already exists" })
+            const findUserName = await userModel.findUserByName(name);
+            if (findUserName) {
+                return res.status(409).json({ message: "This name is already in use" })
+            }
+
+            const findUserEmail = await userModel.findUserByEmail(email);
+            if (findUserEmail) {
+                return res.status(409).json({ message: "This email is already in use" })
             }
 
             const totalUsers = await userUseCase.getFirstInList(1);
@@ -27,7 +32,6 @@ export class UserController {
                 const newUser = await userUseCase.registerUser(req.body);
                 res.status(200).json(newUser)
             }
-
 
         } catch (error) {
             res.status(500).json({ error: "Error retrieving user" })
@@ -44,6 +48,16 @@ export class UserController {
             const findUser = await userModel.findUserById(req.params.userId);
             if (!findUser) {
                 return res.status(404).json({ message: "User not found" })
+            }
+
+            const findUserName = await userModel.findUserByName(name);
+            if (findUserName && findUser.name !== name) {
+                return res.status(409).json({ message: "This name is already in use" })
+            }
+
+            const findUserEmail = await userModel.findUserByEmail(email);
+            if (findUserEmail && findUser.email !== email) {
+                return res.status(409).json({ message: "This email is already in use" })
             }
 
             const updatedUser = await userUseCase.updateUser(req.params.userId, { name, email, password });

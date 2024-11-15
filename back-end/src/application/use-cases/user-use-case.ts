@@ -20,7 +20,7 @@ export class UserUseCase {
        
         await this.userRepository.registerUser(userValue);
 
-        const { password: _, deleted: __, role: ___, ...publicUser } = userValue;
+        const { password: _, ...publicUser } = userValue;
         return publicUser;
     }
 
@@ -30,7 +30,7 @@ export class UserUseCase {
 
         await this.userRepository.registerAdmin(userValue);
 
-        const { password: _, deleted: __, ...publicUser } = userValue;
+        const { password: _, ...publicUser } = userValue;
         return publicUser;
     }
 

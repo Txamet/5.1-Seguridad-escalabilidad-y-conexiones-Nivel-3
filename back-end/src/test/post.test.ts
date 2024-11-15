@@ -210,7 +210,7 @@ describe("GET/posts/:postId", () => {
     test("should respond with a 200 status code when a post is displayed by id", async () => {
         const response = await request(app).get(`/posts/${postId}`).set("Authorization", `Bearer ${token}`).send();
         expect(response.statusCode).toBe(200);
-        expect(response.body.post.title).toEqual("Post para testing 1 editado"); 
+        expect(response.body.data.title).toEqual("Post para testing 1 editado"); 
     });
 
     test("should respond with a 401 status code when access token is missing", async () => {

@@ -205,6 +205,12 @@ router.post("/login", UserController.loginUser);
  *           application/json:
  *             schema:
  *               $ref: "#/components/schemas/UserNotFound"
+ *       409:
+ *         description: User already exists in database
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/UserAlreadyExists"
  *       422:
  *         description: Invalid input data format
  *         content:

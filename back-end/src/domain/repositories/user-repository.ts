@@ -2,6 +2,7 @@ import { UserEntity } from "../entities/user-entity";
 
 export interface UserRepository {
     findUserById(id: string): Promise<UserEntity | null>;
+    findUserByName(name: string): Promise<UserEntity | null>;
     findUserByEmail(email: string): Promise<UserEntity | null>;
     findDeletedUserById(id: string): Promise<UserEntity | null>;
     registerAdmin(user: UserEntity): Promise<UserEntity | null>;

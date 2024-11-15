@@ -28,14 +28,24 @@ describe("POST/users/register", () => {
         expect(response.body.role).toEqual("simpleUser");
     });
 
-    test("should respond with a 409 status code when user already exists", async () => {
+    test("should respond with a 409 status code when email already exists", async () => {
         const response = await request(app).post("/users/register").send({
-            "name": "Jaume",
+            "name": "James",
             "email": "jaume@email.com",
             "password": "jaume"
         });
         expect(response.statusCode).toBe(409);
-        expect(response.body).toEqual({ message: "User already exists" });
+        expect(response.body).toEqual({ message: "This email is already in use" });
+    });
+
+    test("should respond with a 409 status code when name already exists", async () => {
+        const response = await request(app).post("/users/register").send({
+            "name": "Jaume",
+            "email": "james@email.com",
+            "password": "jaume"
+        });
+        expect(response.statusCode).toBe(409);
+        expect(response.body).toEqual({ message: "This name is already in use" });
     });
 
     test("should respond with a 422 status code when data format is invalid", async () => {
