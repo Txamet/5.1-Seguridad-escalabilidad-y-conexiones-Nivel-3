@@ -8,7 +8,7 @@ import {Post} from "../types";
 
 const PostPage: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
-  const [post, setPost] = useState<Post | null >(null);
+  const [post, setPost] = useState<Post>();
   const [authUser, setAuthUser] = useState(false);
   const [adminUser, setAdminUser] = useState(false);
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ const PostPage: React.FC = () => {
   const handleLike = async () => {
     try {
       const like = await api.post(`/posts/${postId}/like`);
-      alert(like.data.success)
+      alert(like.data.message)
 
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -88,7 +88,7 @@ const PostPage: React.FC = () => {
   const handleDelete = async () => {
     try {
       const like = await api.delete(`/posts/${postId}`);
-      alert(like.data.success);
+      alert(like.data.message);
       window.location.reload();
       
     } catch (error) {
@@ -104,7 +104,7 @@ const PostPage: React.FC = () => {
   const handleRecover = async () => {
     try {
       const like = await api.patch(`/posts/${postId}/recover`);
-      alert(like.data.success);
+      alert(like.data.message);
       window.location.reload();
         
     } catch (error) {
@@ -118,7 +118,7 @@ const PostPage: React.FC = () => {
   };
 
   if (!post) {
-    return <p>Loading...</p>;
+    return <p>Error loading page</p>;
   }
 
   const lastDate = (post.data.createdAt !== post.data.updatedAt) ? post.data.updatedAt : post.data.createdAt

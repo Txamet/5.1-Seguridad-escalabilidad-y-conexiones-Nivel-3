@@ -160,15 +160,14 @@ export class PostController {
         const postId = req.params.postId;
 
         try {
-            const post = await postUseCase.getPost(postId);
-            if (!post) return res.status(404).json({ message: "Post doesn't exists" });
+            const data = await postUseCase.getPost(postId);
+            if (!data) return res.status(404).json({ message: "Post doesn't exists" });
 
-            const user = await userModel.findUserById(post.userId);
+            const user = await userModel.findUserById(data.userId);
             const author = user?.name;
 
             const popularity = await postPopularity(postId);
-    
-            res.status(200).json({post, author, popularity});
+            res.status(200).json({data, author, popularity});
 
         } catch (error) {
             res.status(500).json({ message: "Error retrieving data" })

@@ -3,33 +3,43 @@ import { Link } from 'react-router-dom';
 import api from '../api/api';
 import Navbar from '../components/NavBar';
 import axios from 'axios';
-import {Post} from "../types"
+import {Post} from "../types";
+import { useParams } from 'react-router-dom';
 
 
 const UserDeletedPostList: React.FC = () => {
- 
   const [posts, setPosts] = useState<Post[]>([]);
+  const {userId} = useParams<{ userId: string }>();
 
-  const fetchPosts = async () => {
-    try {
-      const userId = localStorage.getItem("userId")  
-      const response = await api.get(`/posts/users/${userId}/deleted`);
-      setPosts(response.data);
-      
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        alert(`Error: ${error.response.data.message}`);
-      } else {
-        alert('Unkown error');
-      }
-      console.error(error);
-    }
-  };
+  
 
   useEffect(() => {
-    fetchPosts();
-  }, []);
+    const fetchPosts = async () => {
+      try { 
+        const response = await api.get(`/posts/users/${userId}/deleted`);
+        setPosts(response.data);
+        
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+          alert(`Error: ${error.response.data.message}`);
+        } else {
+          alert('Unkown error');
+        }
+        console.error(error);
+      }
+    };
 
+    fetchPosts();
+  }, [userId]);
+
+  if(!posts) return(
+    <>
+    <Navbar /> 
+    <div className='form'>
+    <h2>"User doesn't have any deleted posts"</h2>
+    </div>
+    </>
+  ) 
   return (
     <>
       <Navbar /> 

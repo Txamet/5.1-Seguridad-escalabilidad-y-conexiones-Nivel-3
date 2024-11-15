@@ -17,7 +17,7 @@ const PostList: React.FC = () => {
     try {
       const response = await api.get('/posts');
       setPosts(response.data);
-
+      
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         alert(`Error: ${error.response.data.message}`);

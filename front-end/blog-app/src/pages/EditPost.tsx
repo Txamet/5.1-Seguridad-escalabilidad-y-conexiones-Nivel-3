@@ -15,9 +15,9 @@ const EditPost: React.FC = () => {
         const oldData = async () => {
             try {
                 const oldPost = await api.get(`/posts/${postId}`);
-                const oldTitle = oldPost.data.post.title;
-                const oldContent = oldPost.data.post.content;
-                
+                const oldTitle = oldPost.data.data.title;
+                const oldContent = oldPost.data.data.content;
+                console.log(oldTitle)
                 setTitle(oldTitle);
                 setContent(oldContent);
 

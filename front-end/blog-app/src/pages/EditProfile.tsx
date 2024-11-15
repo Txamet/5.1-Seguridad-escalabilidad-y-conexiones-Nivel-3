@@ -14,7 +14,6 @@ const EditProfile: React.FC = () => {
   useEffect(() => {
     const oldData = async () => {
         try {
-            
             const oldPost = await api.get(`/users/${userId}`);
             const oldName = oldPost.data.name;
             const oldEmail = oldPost.data.email;

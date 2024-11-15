@@ -33,6 +33,16 @@ const UserPostList: React.FC = () => {
     fetchPosts();
   }, [userId]);
 
+  if(!posts) return(
+    <>
+    <Navbar /> 
+    <div className='form'>
+    <h2>"User doesn't created any posts"</h2>
+    </div>
+    </>
+  ) 
+
+
   return (
     <>
       <Navbar /> 

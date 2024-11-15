@@ -59,18 +59,11 @@ export class UserUseCase {
         await this.userRepository.recoverUser(id);
     }
 
-    async getOneUser(id: string) {
-        const user: any = await this.userRepository.getOneUser(id);
-        const { password: _, deleted: __, role: ___, ...publicUser } = user;
-
-        return publicUser;
-    }
-
     async getUsers() {
         const users = await this.userRepository.getUsers();
 
         const filteredUsers = users.map((user: any) => {
-            const { password: _, deleted: __, role: ___, ...publicUser } = user;
+            const { password: _, ...publicUser } = user;
             return publicUser
         })
         

@@ -103,8 +103,10 @@ export class UserController {
 
     static async getOneUser(req: any, res: any) {
         try {
-            const user = await userUseCase.getOneUser(req.params.userId);
-            res.status(200).json(user)
+            const user: any = await userModel.findUserById(req.params.userId);
+            const { password: _, ...publicUser } = user;
+
+            res.status(200).json(publicUser)
             
         } catch (error) {
             res.status(500).json({ message: "Error retrieving user" })
