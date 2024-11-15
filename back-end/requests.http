@@ -2,10 +2,11 @@
 @BASE_URL= http://localhost:3000
 
 ### Edit Authorization token in this line 
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlMzk5MjA1LWNlODAtNGU2Zi04MDAyLTE5OTUzNjEwZTIyNyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczMTQxMTQzMiwiZXhwIjoxNzMxNDE1MDMyfQ.ri_j0xdd0YvNmVsAnsdtMEewZiYj0BNZnkDUdUcskik
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImEwNzZjMTQzLWI0ZTctNDUwZS05ZDQ5LTJjZWMwZmNhMGMyZSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczMTY2OTczMywiZXhwIjoxNzMxNjczMzMzfQ.iZ-3s1xwG8WBtBbIPn6F2GzgHJpmM1J358LcdyYRt74
+
 
 ### Edit userID in this line 
-@USER_ID = 4e399205-ce80-4e6f-8002-19953610e227
+@USER_ID = a076c143-b4e7-450e-9d49-2cec0fca0c2e
 
 
 ### Edit postID in this line 
@@ -17,9 +18,9 @@ POST {{BASE_URL}}/users/register
 Content-Type: application/json
 
 {
-  "name": "Jaume",  
-  "email": "testuser@example.com",
-  "password": "password123"
+  "name": "jaume",  
+  "email": "jaume@email.com",
+  "password": "jaume"
 }
 
 
@@ -33,7 +34,7 @@ Content-Type: application/json
 }
 
 
-### Get all users (requires authentication)
+### Get all users (requires admin authentication)
 GET {{BASE_URL}}/users
 Authorization: Bearer {{TOKEN}}
 
@@ -57,7 +58,7 @@ Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
-  "name": "Jaume editado",
+  "name": "Jaume",
   "email": "jaume@email.com",
   "password": "jaume"
 }
@@ -125,7 +126,6 @@ Authorization: Bearer {{TOKEN}}
 
 
 ### Return user data
-# Replace 'userId' with the actual user ID you want to restore
 GET {{BASE_URL}}/users/{{USER_ID}}
 Authorization: Bearer {{TOKEN}}
 Content-Type: application/json

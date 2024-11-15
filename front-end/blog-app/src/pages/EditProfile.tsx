@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/NavBar';
 import api from '../api/api';
+import axios from 'axios';
 
 const EditProfile: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -36,6 +37,11 @@ const EditProfile: React.FC = () => {
       navigate(`/users/${userId}`);
       
     } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        alert(`Error: ${error.response.data.message}`);
+      } else {
+        alert('Unkown error');
+      }
       console.error(error);
     }
   };

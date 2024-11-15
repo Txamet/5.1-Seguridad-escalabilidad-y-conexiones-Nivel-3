@@ -1,13 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/api';
 import Navbar from '../components/NavBar';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { Post } from '../types';
 
 
 const UserPostList: React.FC = () => {
-  const [posts, setPosts] = useState<any>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const {userId} = useParams<{ userId: string }>();
 
   
@@ -19,7 +21,12 @@ const UserPostList: React.FC = () => {
         setPosts(response.data);
         
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        if (axios.isAxiosError(error) && error.response) {
+          alert(`Error: ${error.response.data.message}`);
+        } else {
+          alert('Unkown error');
+        }
+        console.error(error);
       }
     };
 
@@ -31,7 +38,7 @@ const UserPostList: React.FC = () => {
       <Navbar /> 
       <div className='form'>
         <h2>Posts</h2>
-          {posts.map((post: any) => (
+          {posts.map((post: Post) => (
             <div key={post.data.id} className="post">
               <Link to={`/posts/${post.data.id}`}>
                 <h3>{post.data.title}</h3>

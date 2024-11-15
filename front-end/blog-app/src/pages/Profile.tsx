@@ -3,15 +3,9 @@ import api from '../api/api';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/NavBar';
+import axios from 'axios';
+import {User} from "../types"
 
-interface User {
-  id: string;
-  name: string
-  email: string;
-  password: string;
-  role: string;
-  deleted: boolean;
-}
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -26,7 +20,12 @@ const Profile: React.FC = () => {
         setUser(response.data);
 
       } catch (error) {
-        console.error('Error fetching post details:', error);
+        if (axios.isAxiosError(error) && error.response) {
+          alert(`Error: ${error.response.data.message}`);
+        } else {
+          alert('Unkown error');
+        }
+        console.error(error);
       }
     };
 
@@ -51,11 +50,15 @@ const Profile: React.FC = () => {
   const handleDelete = async () => {
     try {
       const like = await api.delete(`/users/${userId}`);
-      alert(like.data.success);
+      alert(like.data.message);
       window.location.reload();
       
     } catch (error) {
-      alert(error)
+      if (axios.isAxiosError(error) && error.response) {
+        alert(`Error: ${error.response.data.message}`);
+      } else {
+        alert('Unkown error');
+      }
       console.error(error);
     }
   };
@@ -63,11 +66,15 @@ const Profile: React.FC = () => {
   const handleRecover = async () => {
     try {
       const like = await api.patch(`/users/${userId}/recover`);
-      alert(like.data.success);
+      alert(like.data.message);
       window.location.reload();
         
     } catch (error) {
-      alert(error)
+      if (axios.isAxiosError(error) && error.response) {
+        alert(`Error: ${error.response.data.message}`);
+      } else {
+        alert('Unkown error');
+      }
       console.error(error);
     }
   };

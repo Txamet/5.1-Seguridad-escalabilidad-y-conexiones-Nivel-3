@@ -9,8 +9,8 @@ export interface User {
 
 export interface Post {
     author: string;
-    popularity: string;
-    post: {
+    popularity: number;
+    data: {
       id: string;
       title: string;
       content: string;

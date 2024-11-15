@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/NavBar';
 import api from "../api/api";
+import axios from "axios";
 
 const EditPost: React.FC = () => {
     const { postId } = useParams<{ postId: string }>();
@@ -21,7 +22,12 @@ const EditPost: React.FC = () => {
                 setContent(oldContent);
 
             } catch (error) {
-                console.error(error);
+                if (axios.isAxiosError(error) && error.response) {
+                    alert(`Error: ${error.response.data.message}`);
+                  } else {
+                    alert('Unkown error');
+                  }
+                  console.error(error);
             }
 
         }
@@ -38,7 +44,12 @@ const EditPost: React.FC = () => {
             navigate(`/posts/${postId}`);
 
         } catch (error) {
-            console.error(error)
+            if (axios.isAxiosError(error) && error.response) {
+                alert(`Error: ${error.response.data.message}`);
+              } else {
+                alert('Unkown error');
+              }
+              console.error(error);
         }
     };
 

@@ -11,6 +11,7 @@ dotenv.config();
 
 export const app = express();
 app.use(express.json());
+app.use(express.urlencoded({extended: false}))
 
 const specs = swaggerJsDoc(options)
 
@@ -29,11 +30,10 @@ export const server = app.listen(PORT,()=>
   console.log(`Server ready at: ${BASE_URL}`)
 );
 
-app.use(express.urlencoded({extended: false}))
-
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(specs));
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
-app.use("/docs", swaggerUI.serve, swaggerUI.setup(specs));
+
 
 app.use((req, res) => {
     res.status(404).json({

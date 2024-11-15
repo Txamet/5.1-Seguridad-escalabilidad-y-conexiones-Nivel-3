@@ -1,17 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/api';
 import Navbar from '../components/NavBar';
+import axios from 'axios';
+import {User} from "../types"
 
-interface User {
-  id: string;
-  name: string
-  email: string;
-  password: string;
-  role: string;
-  deleted: boolean;
-}
 
 const UsersList: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -24,7 +18,12 @@ const UsersList: React.FC = () => {
           setUsers(response.data);
           
         } catch (error) {
-          console.error('Error fetching posts:', error);
+          if (axios.isAxiosError(error) && error.response) {
+            alert(`Error: ${error.response.data.message}`);
+          } else {
+            alert('Unkown error');
+          }
+          console.error(error);
         }
     };
 
@@ -47,7 +46,7 @@ const UsersList: React.FC = () => {
       <Navbar /> 
       { adminUser && (<div className='form'>
         <h2>User List</h2>
-          {users.map((user: any) => (
+          {users.map((user: User) => (
             <div key={user.id} className="post">
               <Link to={`/users/${user.id}`}>
                 <h3>{user.name}</h3>

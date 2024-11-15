@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import api from "../api/api";
 import Navbar from '../components/NavBar';
+import axios from 'axios';
 
 const CreatePost: React.FC = () => {
     const [title, setTitle] = useState("");
@@ -16,7 +17,12 @@ const CreatePost: React.FC = () => {
             navigate("/posts");
 
         } catch (error) {
-            console.error(error)
+            if (axios.isAxiosError(error) && error.response) {
+                alert(`Error: ${error.response.data.message}`);
+              } else {
+                alert('Unkown error');
+              }
+              console.error(error);
         }
     };
 

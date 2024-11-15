@@ -18,20 +18,20 @@ export class UserUseCase {
         let passwordHash = await HashService.hashPassword(password); 
         const userValue = new UserValue(id, name, email, passwordHash, "simpleUser", false);
        
-        const user = await this.userRepository.registerUser(userValue);
+        await this.userRepository.registerUser(userValue);
 
-        const { password: _, deleted: __, ...publicUser } = userValue;
-        return user;
+        const { password: _, deleted: __, role: ___, ...publicUser } = userValue;
+        return publicUser;
     }
 
     async registerAdmin({id, name, email, password}: {id: string, name: string, email: string, password: string}) {
         let passwordHash = await HashService.hashPassword(password);
         const userValue = new UserValue(id, name, email, passwordHash, "admin", false);
 
-        const user = await this.userRepository.registerAdmin(userValue);
+        await this.userRepository.registerAdmin(userValue);
 
         const { password: _, deleted: __, ...publicUser } = userValue;
-        return user;
+        return publicUser;
     }
 
     async updateUser(id: string, data: any) {
@@ -45,9 +45,10 @@ export class UserUseCase {
             userValue = new UserValue(id, data.name, data.email, data.password, data.role, data.deleted);
         }
 
-        const user = await this.userRepository.updateUser(id, userValue);
-        
-        return user;
+        await this.userRepository.updateUser(id, userValue);
+        const { password: _, deleted: __, role: ___, ...publicUser } = userValue;
+
+        return publicUser;
     }
 
     async deleteUser(id: string) {
@@ -58,10 +59,22 @@ export class UserUseCase {
         await this.userRepository.recoverUser(id);
     }
 
+    async getOneUser(id: string) {
+        const user: any = await this.userRepository.getOneUser(id);
+        const { password: _, deleted: __, role: ___, ...publicUser } = user;
+
+        return publicUser;
+    }
+
     async getUsers() {
         const users = await this.userRepository.getUsers();
 
-        return users;
+        const filteredUsers = users.map((user: any) => {
+            const { password: _, deleted: __, role: ___, ...publicUser } = user;
+            return publicUser
+        })
+        
+        return filteredUsers;
     }
 
     async loginUser(email: string, password: string) {

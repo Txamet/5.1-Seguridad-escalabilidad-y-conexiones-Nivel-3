@@ -9,6 +9,7 @@ export interface UserRepository {
     updateUser(id: string, user: UserEntity): Promise<UserEntity | null>;
     deleteUser(id: string): Promise<void>;
     recoverUser(id: string): Promise<void>;
+    getOneUser(id: string): Promise<UserEntity | null>;
     getUsers(): Promise<UserEntity[]>;
     getFirstInList(limit: number): Promise<UserEntity[]>;
     totalUsers(): Promise<number | null>

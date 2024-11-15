@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
+import axios from 'axios';
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -15,6 +16,11 @@ const Register: React.FC = () => {
       navigate('/posts');
       
     } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        alert(`Error: ${error.response.data.message}`);
+      } else {
+        alert('Unkown error');
+      }
       console.error(error);
     }
   };

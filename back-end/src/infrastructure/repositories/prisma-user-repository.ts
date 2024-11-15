@@ -47,6 +47,17 @@ export class prismaUserModel implements UserRepository {
         return result
     }
 
+    async getOneUser(id: string): Promise<UserEntity | null> {
+        const user = await prisma.user.findFirst({
+            where: { id: id }
+        });
+
+        if (!user) return null;
+
+        const result = new UserValue(user.id, user.name, user.email, user.password, user.role, user.deleted);
+        return result;
+    }
+
 
     async getUsers(): Promise<UserEntity[]> {
         const result =  await prisma.user.findMany();

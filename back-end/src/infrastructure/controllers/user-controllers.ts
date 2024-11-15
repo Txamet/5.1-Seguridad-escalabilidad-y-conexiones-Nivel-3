@@ -62,7 +62,7 @@ export class UserController {
             }
     
             await userUseCase.deleteUser(req.params.userId);
-            res.status(200).json({ message: "User deleted"})
+            res.status(200).json({ message: "User banned"})
     
     
         } catch (error) {
@@ -79,7 +79,7 @@ export class UserController {
             if (searchUserByEmail) return res.status(409).json({message: "User already exists with another userId"});
         
             await userUseCase.recoverUser(req.params.userId);
-            res.status(200).json({message: "User recovered"}); 
+            res.status(200).json({message: "User unbanned"}); 
     
         } catch (error) {
             res.status(500).json({message: "Error retrieving user"});
@@ -103,7 +103,7 @@ export class UserController {
 
     static async getOneUser(req: any, res: any) {
         try {
-            const user = await userModel.findUserById(req.params.userId);
+            const user = await userUseCase.getOneUser(req.params.userId);
             res.status(200).json(user)
             
         } catch (error) {

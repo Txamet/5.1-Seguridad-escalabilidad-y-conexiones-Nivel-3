@@ -3,20 +3,8 @@ import { useParams } from 'react-router-dom';
 import api from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/NavBar';
-
-interface Post {
-  author: string;
-  popularity: string;
-  post: {
-    id: string;
-    title: string;
-    content: string;
-    createdAt: string;
-    updatedAt: string;
-    deleted: boolean;
-    userId: string;
-  }
-}
+import axios from 'axios';
+import {Post} from "../types";
 
 const PostPage: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
@@ -33,7 +21,12 @@ const PostPage: React.FC = () => {
         setPost(responsePost.data);
   
       } catch (error) {
-        console.error('Error fetching post details:', error);
+        if (axios.isAxiosError(error) && error.response) {
+          alert(`Error: ${error.response.data.message}`);
+        } else {
+          alert('Unkown error');
+        }
+        console.error(error);
       }
     };
 
@@ -43,7 +36,7 @@ const PostPage: React.FC = () => {
   useEffect(() => {
     const fetchAuthUser = async () => {
       try {
-        const authId = post?.post.userId;
+        const authId = post?.data.userId;
         const userId = localStorage.getItem("userId");
         setAuthUser(authId === userId);
 
@@ -73,7 +66,11 @@ const PostPage: React.FC = () => {
       alert(like.data.success)
 
     } catch (error) {
-      alert(error)
+      if (axios.isAxiosError(error) && error.response) {
+        alert(`Error: ${error.response.data.message}`);
+      } else {
+        alert('Unkown error');
+      }
       console.error(error);
     }
   };
@@ -95,7 +92,11 @@ const PostPage: React.FC = () => {
       window.location.reload();
       
     } catch (error) {
-      alert(error)
+      if (axios.isAxiosError(error) && error.response) {
+        alert(`Error: ${error.response.data.message}`);
+      } else {
+        alert('Unkown error');
+      }
       console.error(error);
     }
   };
@@ -107,7 +108,11 @@ const PostPage: React.FC = () => {
       window.location.reload();
         
     } catch (error) {
-      alert(error)
+      if (axios.isAxiosError(error) && error.response) {
+        alert(`Error: ${error.response.data.message}`);
+      } else {
+        alert('Unkown error');
+      }
       console.error(error);
     }
   };
@@ -116,10 +121,10 @@ const PostPage: React.FC = () => {
     return <p>Loading...</p>;
   }
 
-  const lastDate = (post.post.createdAt !== post.post.updatedAt) ? post.post.updatedAt : post.post.createdAt
+  const lastDate = (post.data.createdAt !== post.data.updatedAt) ? post.data.updatedAt : post.data.createdAt
   let showDate;
 
-  if (lastDate === post.post.createdAt) {
+  if (lastDate === post.data.createdAt) {
     showDate = `Creation date: ${new Date(lastDate).toLocaleDateString()}`
   } else {
     showDate = `Last update: ${new Date(lastDate).toLocaleDateString()}`
@@ -129,8 +134,8 @@ const PostPage: React.FC = () => {
     <>
       <Navbar /> 
       <div className = 'form'>
-        <h2>{post.post.title}</h2>
-        <p>{post.post.content}</p>
+        <h2>{post.data.title}</h2>
+        <p>{post.data.content}</p>
         <p>Author: {post.author}</p>
         <p>Popularity: {post.popularity}%</p>
         <small>{showDate}</small>
@@ -146,11 +151,11 @@ const PostPage: React.FC = () => {
           <button onClick = {handleEdit} >Edit this post</button>
         )}
         <p></p> 
-        {(authUser || adminUser) && post.post.deleted === false && (
+        {(authUser || adminUser) && post.data.deleted === false && (
           <button onClick = {handleDelete} >Delete this post</button>
         )}
         <p></p> 
-        {(authUser || adminUser) && post.post.deleted === true && (
+        {(authUser || adminUser) && post.data.deleted === true && (
           <button onClick = {handleRecover} >Recover this post</button>
         )}
       </div>

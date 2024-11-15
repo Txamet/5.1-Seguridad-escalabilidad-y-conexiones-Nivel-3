@@ -3,20 +3,9 @@ import { Link } from 'react-router-dom';
 import api from '../api/api';
 import Navbar from '../components/NavBar';
 import SearchBar from '../components/SearchBar';
+import axios from 'axios';
+import {Post} from "../types";
 
-interface Post {
-  author: string;
-  popularity: number;
-  data: {
-    id: string;
-    title: string;
-    content: string;
-    createdAt: string;
-    updatedAt: string;
-    deleted: boolean;
-    userId: string;
-  };
-}
 
 const PostList: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -30,7 +19,12 @@ const PostList: React.FC = () => {
       setPosts(response.data);
 
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      if (axios.isAxiosError(error) && error.response) {
+        alert(`Error: ${error.response.data.message}`);
+      } else {
+        alert('Unkown error');
+      }
+      console.error(error);
     }
   };
 
