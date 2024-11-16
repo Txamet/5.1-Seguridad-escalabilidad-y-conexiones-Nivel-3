@@ -80,51 +80,51 @@ const router = express.Router();
  *     EmptyList:
  *       type: object
  *       properties:
- *         success:
+ *         message:
  *           type: string
  *           description: a message for response 204 empty content
  *       example:
- *         success: The posts list is empty
+ *         message: The posts list is empty
  *     UserNotAuthorized:
  *       type: object
  *       properties:
- *         error:
+ *         message:
  *           type: string
  *           description: a message for error 401 user not authorized
  *       example:
- *         error: User isn't authorized to update this post
+ *         message: User isn't authorized to update this post
  *     PostNotFound:
  *       type: object
  *       properties:
- *         error:
+ *         message:
  *           type: string
  *           description: a message for error 404 post not found
  *       example:
- *         error: Post doesn't exists   
+ *         message: Post doesn't exists   
  *     PostReallyLiked:
  *       type: object
  *       properties:
- *         error:
+ *         message:
  *           type: string
  *           description: a message for error 409 post already liked
  *       example:
- *         error: User already liked this post once  
+ *         message: User already liked this post once  
  *     InvalidFormat:
  *       type: object
  *       properties:
- *         error:
+ *         message:
  *           type: string
  *           description: a message for error 422 invalid data format
  *       example:
- *         error: Invalid data format
+ *         message: Invalid data format
  *     ErrorOnDatabase:
  *       type: object
  *       properties:
- *         error:
+ *         message:
  *           type: string
  *           description: a messsage for error 500 retrieving post data from database
  *       example:
- *         error: Error retrieving data            
+ *         message: Error retrieving data            
  *   parameters:
  *     postId:
  *       in: path

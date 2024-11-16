@@ -7,6 +7,7 @@ export interface UserRepository {
     findDeletedUserById(id: string): Promise<UserEntity | null>;
     registerAdmin(user: UserEntity): Promise<UserEntity | null>;
     registerUser(user: UserEntity): Promise<UserEntity | null>;
+    setAdmin(id: string): Promise<void>;
     updateUser(id: string, user: UserEntity): Promise<UserEntity | null>;
     deleteUser(id: string): Promise<void>;
     recoverUser(id: string): Promise<void>;

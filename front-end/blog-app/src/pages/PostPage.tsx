@@ -21,7 +21,9 @@ const PostPage: React.FC = () => {
         setPost(responsePost.data);
   
       } catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
+        if (axios.isAxiosError(error) && error.response && error.response.status == 403) {
+          navigate("/");
+        } else if (axios.isAxiosError(error) && error.response) {   
           alert(`Error: ${error.response.data.message}`);
         } else {
           alert('Unkown error');
@@ -31,7 +33,7 @@ const PostPage: React.FC = () => {
     };
 
     fetchPost();
-  }, [postId]);
+  }, [postId, navigate]);
 
   useEffect(() => {
     const fetchAuthUser = async () => {
@@ -56,8 +58,7 @@ const PostPage: React.FC = () => {
     }
 
     fetchAuthUser();
-    fetchAdminUser();
-    
+    fetchAdminUser();  
   })
 
   const handleLike = async () => {
@@ -118,7 +119,7 @@ const PostPage: React.FC = () => {
   };
 
   if (!post) {
-    return <p>Error loading page</p>;
+    return <h1>Error 404</h1>
   }
 
   const lastDate = (post.data.createdAt !== post.data.updatedAt) ? post.data.updatedAt : post.data.createdAt
@@ -144,19 +145,19 @@ const PostPage: React.FC = () => {
       <p></p><br />
       <div className = "form"> 
         {!authUser && (
-          <button onClick = {handleLike} >Like this post</button>
+          <button onClick = {handleLike}>Like this post</button>
         )}
         <p></p> 
         {authUser && (
-          <button onClick = {handleEdit} >Edit this post</button>
+          <button onClick = {handleEdit}>Edit this post</button>
         )}
         <p></p> 
         {(authUser || adminUser) && post.data.deleted === false && (
-          <button onClick = {handleDelete} >Delete this post</button>
+          <button onClick = {handleDelete}>Delete this post</button>
         )}
         <p></p> 
         {(authUser || adminUser) && post.data.deleted === true && (
-          <button onClick = {handleRecover} >Recover this post</button>
+          <button onClick = {handleRecover}>Recover this post</button>
         )}
       </div>
     </>

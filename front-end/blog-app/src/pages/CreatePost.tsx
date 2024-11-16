@@ -17,12 +17,14 @@ const CreatePost: React.FC = () => {
             navigate("/posts");
 
         } catch (error) {
-            if (axios.isAxiosError(error) && error.response) {
+            if (axios.isAxiosError(error) && error.response && error.response.status == 403) {
+                navigate("/");
+            } else if (axios.isAxiosError(error) && error.response) {   
                 alert(`Error: ${error.response.data.message}`);
-              } else {
+            } else {
                 alert('Unkown error');
-              }
-              console.error(error);
+            }
+            console.error(error);
         }
     };
 

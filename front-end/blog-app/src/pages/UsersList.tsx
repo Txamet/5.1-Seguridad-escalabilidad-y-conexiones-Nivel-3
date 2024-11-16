@@ -1,15 +1,16 @@
-
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/api';
 import Navbar from '../components/NavBar';
 import axios from 'axios';
-import {User} from "../types"
+import {User} from "../types";
+import { useNavigate } from 'react-router-dom';
 
 
 const UsersList: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [adminUser, setAdminUser] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -18,7 +19,9 @@ const UsersList: React.FC = () => {
           setUsers(response.data);
           
         } catch (error) {
-          if (axios.isAxiosError(error) && error.response) {
+          if (axios.isAxiosError(error) && error.response && error.response.status == 403) {
+            navigate("/");
+          } else if (axios.isAxiosError(error) && error.response) {   
             alert(`Error: ${error.response.data.message}`);
           } else {
             alert('Unkown error');
@@ -39,7 +42,11 @@ const UsersList: React.FC = () => {
 
     fetchUsers();
     fetchAdminUser();
-  }, []);
+  }, [navigate]);
+
+  if (!users) {
+    return <h1>Error 404</h1>
+  }
 
   return (
     <>
@@ -58,7 +65,7 @@ const UsersList: React.FC = () => {
             </div>
           ))}
       </div>)}
-      { !adminUser && (<p>Unauthorized access</p>)}
+      { !adminUser && (<h2>Unauthorized access</h2>)}
     </>
   );
 };

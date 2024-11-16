@@ -59,7 +59,12 @@ export class prismaUserModel implements UserRepository {
     }
 
     async getUsers(): Promise<UserEntity[]> {
-        const result =  await prisma.user.findMany();
+        const result =  await prisma.user.findMany({
+            orderBy:[ 
+                { role: "asc" },
+                { name: "asc" }
+            ]
+        });
         return result;
     };
 
@@ -91,6 +96,13 @@ export class prismaUserModel implements UserRepository {
 
         const result = new UserValue(createdUser.id, createdUser.name, createdUser.email, createdUser.password, createdUser.role, createdUser.deleted);
         return result
+    }
+
+    async setAdmin(id: string): Promise<void> {
+        const setNewAdmin = await prisma.user.update({
+            where: { id },
+            data: { role: "admin" }
+        })
     }
 
     async deleteUser(id: string): Promise<void> {

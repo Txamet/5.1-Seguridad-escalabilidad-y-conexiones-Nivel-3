@@ -68,11 +68,29 @@ export class UserController {
         }
     };
 
+    static async setAdmin(req: any, res: any) {
+        try {
+            const findUser = await userModel.findUserById(req.params.userId);
+            if (findUser === null) {
+                return res.status(404).json({ message: "User not found" })
+            }
+
+            await userUseCase.setAdmin(req.params.userId);
+            res.status(200).json({ message: "User role is upgraded to administrator" })
+            
+        } catch (error) {
+            res.status(500).json({ message: "Error retrieving user" })
+        }
+    }
+
     static async deleteUser(req: any, res: any) {
         try {
             const findUser = await userModel.findUserById(req.params.userId);
             if (findUser === null) {
                 return res.status(404).json({ message: "User not found" })
+                
+            } else if (findUser.role === "admin") {
+                return res.status(401).json({ message: "User isn't authorized to delete this user"})
             }
     
             await userUseCase.deleteUser(req.params.userId);

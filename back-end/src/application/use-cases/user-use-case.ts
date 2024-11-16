@@ -34,6 +34,10 @@ export class UserUseCase {
         return publicUser;
     }
 
+    async setAdmin(id: string) {
+        await this.userRepository.setAdmin(id);
+    }
+
     async updateUser(id: string, data: any) {
         let userValue;
         

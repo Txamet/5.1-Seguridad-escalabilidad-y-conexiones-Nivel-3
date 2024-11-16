@@ -37,35 +37,51 @@ const router = express.Router();
  *     UserNotFound:
  *       type: object
  *       properties:
- *         error:
+ *         message:
  *           type: string
  *           description: a message for error 404 user not found
  *       example:
- *         error: User doesn't exists
+ *         message: User not found
+ *     UserNotAuthorized:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           description: a message for error 401 user not authorized
+ *       example:
+ *         message: Access token is missing
+ *     UserNotAdmin:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           description: a message for error 403 only admin access
+ *       example:
+ *         message: Access denied, admin only
  *     ErrorOnDatabase:
  *       type: object
  *       properties:
- *         error:
+ *         message:
  *           type: string
  *           description: a messsage for error 500 retrieving user data from database
  *       example:
- *         error: Error retrieving data   
+ *         message: Error retrieving user   
  *     UserAlreadyExists:
  *       type: object
  *       properties:
- *         error:
+ *         message:
  *           type: string
  *           description: a message for error 409 user already exists
  *       example:
- *         error: User already exists with another userId 
+ *         message: This name is already in use 
  *     InvalidFormat:
  *       type: object
  *       properties:
- *         error:
+ *         message:
  *           type: string
  *           description: a message for error 422 invalid data format
  *       example:
- *         error: Invalid data format                       
+ *         message: Invalid data format                       
  *   parameters:
  *     userId:
  *       in: path
@@ -199,6 +215,12 @@ router.post("/login", UserController.loginUser);
  *           application/json:
  *             schema:
  *               $ref: "#/components/schemas/User"
+ *       401:
+ *         description: User not authorized  
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/UserNotAuthorized"
  *       404:
  *         description: User not found  
  *         content:
@@ -230,6 +252,57 @@ router.put("/:userId", AuthMiddleware, UserController.updateUser);
 
 /**
  * @swagger
+ * /users/{userId}/upgrade:
+ *   patch:
+ *     summary: Sets a simple user role to administrator  
+ *     tags: [Users] 
+ *     security:
+ *       - Token: []
+ *     parameters:
+ *       - $ref: "#/components/parameters/userId"
+ *     responses:
+ *       200:
+ *         description: User role succesfully upgraded to admin
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: string
+ *                   description: user upgraded to admin
+ *               example:
+ *                 message: User role is upgraded to administrator
+ *       401:
+ *         description: User not authorized  
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/UserNotAuthorized"
+ *       403:
+ *         description: Access restricted to administrators 
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/UserNotAdmin"
+ *       404: 
+ *         description: User not found  
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/UserNotFound"
+ *       500:
+ *         description: Error retrieving user data from database
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/ErrorOnDatabase"       
+ */
+
+router.patch("/:userId/upgrade", AuthMiddleware, authorizeAdmin, UserController.setAdmin);
+
+/**
+ * @swagger
  * /users/{userId}:
  *   delete:
  *     summary: Soft delete an user
@@ -251,6 +324,18 @@ router.put("/:userId", AuthMiddleware, UserController.updateUser);
  *                   description: user soft deleted
  *               example:
  *                 success: User deleted 
+ *       401:
+ *         description: User not authorized  
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/UserNotAuthorized"
+ *       403:
+ *         description: Access restricted to administrators 
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/UserNotAdmin"
  *       404: 
  *         description: User not found  
  *         content:
@@ -291,6 +376,18 @@ router.delete("/:userId", AuthMiddleware, authorizeAdmin, UserController.deleteU
  *                   description: user recovered from soft delete
  *               example:
  *                 success: User recovered 
+ *       401:
+ *         description: User not authorized  
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/UserNotAuthorized"
+ *       403:
+ *         description: Access restricted to administrators 
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/UserNotAdmin"
  *       404: 
  *         description: User not found  
  *         content:
@@ -331,6 +428,18 @@ router.patch("/:userId/recover", AuthMiddleware, authorizeAdmin, UserController.
  *              type: array   
  *              items:
  *                $ref: "#/components/schemas/User"
+ *      401:
+ *         description: User not authorized  
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/UserNotAuthorized"
+ *      403:
+ *         description: Access restricted to administrators 
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/UserNotAdmin"
  *      500:
  *         description: Error retrieving user data from database
  *         content:
@@ -359,6 +468,12 @@ router.get("/", AuthMiddleware, authorizeAdmin, UserController.getUsers);
  *          application/json:  
  *            schema:
  *              $ref: "#/components/schemas/User"
+ *      401:
+ *         description: User not authorized  
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/UserNotAuthorized"
  *      500:
  *         description: Error retrieving user data from database
  *         content:

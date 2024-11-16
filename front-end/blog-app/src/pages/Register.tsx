@@ -9,10 +9,19 @@ const Register: React.FC = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  const login = async () => {
+    const response = await api.post('/users/login', { email, password });
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('username', response.data.name);
+      localStorage.setItem('userId', response.data.id);
+      localStorage.setItem('role', response.data.role);
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await api.post('/users/register', { name, email, password });
+      await login();
       navigate('/posts');
       
     } catch (error) {

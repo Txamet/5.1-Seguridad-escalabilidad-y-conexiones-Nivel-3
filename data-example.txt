@@ -1,0 +1,98 @@
+*** REGISTER USER 1 ***
+name: Jaume
+email: jaume@email.com
+password: jaume
+
+
+
+
+*** REGISTER USER 2 ***
+name: Pepito
+email: pepito@email.com
+password: pepito
+
+
+
+
+*** REGISTER USER 3 ***
+name: Antonio
+email: antonio@email.com
+password: antonio
+
+
+
+
+*** POST USER JAUME ***
+title: Is there a good reason NOT to use TypeScript on a huge project like Firefox browser?
+content: I've been full-time JavaScript programmer for about 6 years, and since 5 years ago, I've switched to TypeScript.
+...I can't stress enough how useful it is - It makes my life so much easier!
+
+So when I see a public repository with a JavaScript code, I feel sorry for them, and I want to help them!
+
+But how do I do that?
+Many/most existing JavaScript devs will just tell you their project is fine as it is and migrating it would be too much work or some other excuse.
+
+Or is JavaScript really good enough if you have enough tests and linter and policies?
+
+
+
+
+*** POST USER JAUME ***
+title: I created a TypeScript first, schema-validation library. Could I get some tips on how to promote/improve it?
+content: So I created this new library called jet-schema, I'm hoping it could eventually become a competitor to things like zod, ajv, typia etc. The philosophy behind it is you write your own validator-functions to validate object properties and use jet-schema to apply the validator-functions to each object property and validate the overall structure of the object. I also created a repo to copy validator functions from here to avoid having to constantly write your own.
+
+I made sure to add .min.js files, unit-tests, good documentation in a readme.md (although maybe that could be better) etc. To promote it I wrote a medium article, made a post on y-combinator, and have posted comments in several youtube videos. I also shared it on X/Twitter.
+
+Does anyone else have any suggestions?
+
+
+
+
+*** POST USER PEPITO ***
+title: Getting type error because TS has decided a variable is type never
+content: I'd appreciate some help here. I've looked over other cases with this error on SO and reddit, but there are just too many different scenarios for this to pop up. Nothing's really helping me debug my code.
+
+Disclosure: This is from a tut. The creator linked me to a finished repo someone else made, deployed and running fine, that uses code that throws the same error. For me, it breaks the app. For them, it runs fine. In the tut, I noticed no errors thrown with identical code. The creator suggested downgrading convex and clerk, but it's like one release different, nowhere close to a full version, and I can't imagine that's what's responsible for this (but tell me if that could actually be it, please).
+
+I'll throw in a code sample, it will be too much to share the entire file. I added line numbers to make this easier. On line 20, filter is flagged because it doesn't exist on type never. friends is then flagged in friends.length on line 22, because it is possibly null.
+
+I've already changed strict to false in tsconfig (eliminated a couple other errors, two in another file for one property, and then a property in this file).
+
+I've also tried assigning an explicit type to friends, but ... I tried assigning it string[], but then I got an error with there not being a ._id property for friend in line 20.
+
+
+
+
+*** POST USER PEPITO ***
+title: Where to place shared types
+content: Hi all,
+
+I'm working on a fun project where we have a Nuxt front-end and Azure functions backend in separate folders in our git repo.
+
+Currently they both have their own types files/folders, but we're going to introduce a type that will be shared by both sides.
+
+The front and back-ends will be hosted separately. We're trying to figure out if it's possible to have them both refer to the same types file/folder, rather than having types on both sides. TS appears to not like pathing outside the front/back end folder (to a higher level). Is there a standard way to do this? Would I need to make the root directory have a ts.config, etc...?
+
+Any advice is appreciated. Cheers!
+
+
+
+
+*** POST USER ANTONIO ***
+title: An even more robust property path parser, supporting complex keys with dots and escape sequences and error reporting
+content: I posted Friday about a little property path parser that I had started work on. It was quite simple and couldn't handle multi-dimensional arrays or complex property keys. After receiving some really great suggestions in the comments, I expanded the parser to add the following:
+
+concrete error type indicating exactly where parsing failed (room for improvement here)
+
+array access chaining for multi-dimensional arrays
+
+validation on standard dot property names to ensure only ID_Start and ID_Continue ASCII characters (no Unicode support)
+
+more robust null handling. When a nullable property is encountered, a union of all possible result types, including parse errors related to undefined property access, are returned.
+
+separate utility type PropertyPath that can be used to validate a property string is in a valid format, unspecific to any type
+
+escape sequences and . in keys, following the same syntax as JavaScript property access
+
+I'm open to any other suggestions, but I believe this is as complete as it needs to be. hex/binary/octal numbers in tuple indecies aren't handled correctly because the infer keyword does not coalesce it to a concrete number, but that's minor.
+

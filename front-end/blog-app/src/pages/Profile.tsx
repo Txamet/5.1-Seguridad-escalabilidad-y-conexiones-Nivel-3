@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/NavBar';
 import axios from 'axios';
-import {User} from "../types"
+import {User} from "../types";
+import { useNavigate } from 'react-router-dom';
 
 
 const Profile: React.FC = () => {
@@ -12,6 +13,7 @@ const Profile: React.FC = () => {
   const {userId} = useParams<{ userId: string }>();
   const tokenUserId = localStorage.getItem("userId");
   const [adminUser, setAdminUser] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -20,7 +22,9 @@ const Profile: React.FC = () => {
         setUser(response.data);
 
       } catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
+        if (axios.isAxiosError(error) && error.response && error.response.status == 403) {
+          navigate("/");
+        } else if (axios.isAxiosError(error) && error.response) {   
           alert(`Error: ${error.response.data.message}`);
         } else {
           alert('Unkown error');
@@ -41,10 +45,10 @@ const Profile: React.FC = () => {
 
     fetchUser();
     fetchAdminUser();
-  }, [userId]);
+  }, [userId, navigate]);
 
   if (!user) {
-    return <p>Loading...</p>;
+    return <h1>Error 404</h1>;
   }
 
   const handleDelete = async () => {
@@ -54,7 +58,9 @@ const Profile: React.FC = () => {
       window.location.reload();
       
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
+      if (axios.isAxiosError(error) && error.response && error.response.status == 403) {
+        navigate("/");
+      } else if (axios.isAxiosError(error) && error.response) {   
         alert(`Error: ${error.response.data.message}`);
       } else {
         alert('Unkown error');
@@ -70,7 +76,9 @@ const Profile: React.FC = () => {
       window.location.reload();
         
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
+      if (axios.isAxiosError(error) && error.response && error.response.status == 403) {
+        navigate("/");
+      } else if (axios.isAxiosError(error) && error.response) {   
         alert(`Error: ${error.response.data.message}`);
       } else {
         alert('Unkown error');
@@ -79,17 +87,39 @@ const Profile: React.FC = () => {
     }
   };
 
+  const handleAdmin = async () => {
+    try {
+      const setAdmin = await api.patch(`/users/${userId}/upgrade`);
+      alert(setAdmin.data.message);
+      window.location.reload();
+
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response && error.response.status == 403) {
+        navigate("/");
+      } else if (axios.isAxiosError(error) && error.response) {   
+        alert(`Error: ${error.response.data.message}`);
+      } else {
+        alert('Unkown error');
+      }
+      console.error(error);
+    }
+  }
+
   return (
     <>
       <Navbar /> 
       <div className='form'>
-      <h2>Profile</h2>
-      <div className='box'>
-        <p>Name: {user.name}</p>
-        <p>Email: {user.email}</p>
-      </div>
+      
       <p></p>
-      { (!adminUser || user.id === tokenUserId) && (<div className='form'>
+      { (!adminUser && user.id !== tokenUserId) && (<h2>Unauthorized access</h2>)} 
+
+      { user.id === tokenUserId && (<div className='form'>
+        <h2>Profile</h2>
+        <div className='box'>
+          <p>Name: {user.name}</p>
+          <p>Email: {user.email}</p>
+        </div>
+        <p></p>
         <Link to={`/users/${userId}/edit`}>
             <button type = "submit">Edit profile</button>
           </Link>
@@ -108,17 +138,27 @@ const Profile: React.FC = () => {
         </div>)}  
         
       { adminUser && user.id !== tokenUserId && (<div className='form'>
-            { user.deleted === false && (<button type = "submit" onClick = {handleDelete}>Ban {user.name}</button>)} 
-            { user.deleted === true && (<button type = "submit" onClick = {handleRecover}>Unban {user.name}</button>)} 
-        <p></p>
+          <h2>Profile</h2>
+          <div className='box'>
+            <p>Name: {user.name}</p>
+            <p>Email: {user.email}</p>
+          </div>
+          <p></p>
           <Link to={`/posts/users/${userId}`}>
             <button type = "submit">View {user.name} posts</button>
           </Link>
-        <p></p>
+          <br />
           <Link to={`/posts/users/${userId}/deleted`}>
             <button type = "submit">View {user.name} deleted posts</button>
           </Link>
-        </div>)}  
+          <br />   
+            { user.deleted === false && user.role === "simpleUser" && (<button type = "submit" onClick = {handleDelete}>Ban {user.name}</button>)} 
+            { user.deleted === true && user.role === "simpleUser" && (<button type = "submit" onClick = {handleRecover}>Unban {user.name}</button>)}
+          <br />
+            { user.deleted === false && user.role === "simpleUser" && (<button type = "submit" onClick = {handleAdmin}>Set {user.name} as admin</button>)}
+        </div>)}
+
+       
       </div>
     </>
   );

@@ -6,14 +6,14 @@ import Navbar from '../components/NavBar';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Post } from '../types';
+import { useNavigate } from 'react-router-dom';
 
 
 const UserPostList: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const {userId} = useParams<{ userId: string }>();
-
+  const navigate = useNavigate();
   
-
   useEffect(() => {
     const fetchPosts = async () => {
       try {  
@@ -21,7 +21,9 @@ const UserPostList: React.FC = () => {
         setPosts(response.data);
         
       } catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
+        if (axios.isAxiosError(error) && error.response && error.response.status == 403) {
+          navigate("/");
+        } else if (axios.isAxiosError(error) && error.response) {   
           alert(`Error: ${error.response.data.message}`);
         } else {
           alert('Unkown error');
@@ -31,13 +33,13 @@ const UserPostList: React.FC = () => {
     };
 
     fetchPosts();
-  }, [userId]);
+  }, [userId, navigate]);
 
   if(!posts) return(
     <>
     <Navbar /> 
     <div className='form'>
-    <h2>"User doesn't created any posts"</h2>
+    <h2>User has not created any posts yet</h2>
     </div>
     </>
   ) 

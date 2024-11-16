@@ -6,14 +6,16 @@ let token: string;
 let userId: string;
 let token2: string;
 let userId2: string;
+let token3: string;
 let userId3: string;
+let userId4: string;
+
 
 beforeAll(async() => {
     const response = await request(app).post("/users/login").send({
         "email": "jaume@email.com",
         "password": "jaume"
     });
-
     token = response.body.token
     userId = response.body.id
 
@@ -21,9 +23,20 @@ beforeAll(async() => {
         "email": "pepito@email.com",
         "password": "pepito"
     });
-
     token2 = response2.body.token
     userId2 = response2.body.id
+
+    await request(app).post("/users/register").send({
+        "name": "Antonio",
+        "email": "antonio@email.com",
+        "password": "antonio"
+    });
+    const response3 = await request(app).post("/users/login").send({
+        "email": "antonio@email.com",
+        "password": "antonio"
+    });
+    token3 = response3.body.token
+    userId3 = response3.body.id
 });
 
 afterAll(() => {
@@ -84,7 +97,7 @@ describe("PUT/users/:userId", () => {
         expect(response.statusCode).toBe(422);
         expect(response.body).toEqual({message: "Invalid data format"})
     });
-})
+});
 
 describe("DELETE/users/:userId", () => {
     test("should respond with a 200 status code when user is deleted succesfully", async () => {
@@ -148,7 +161,7 @@ describe("PATCH/users/:userId/recover", () => {
             "email": "pepito@email.com",
             "password": "pepito"
         });
-        userId3 = loginUser.body.id
+        userId4 = loginUser.body.id
 
         const response = await request(app).patch(`/users/${userId2}/recover`).set("Authorization", `Bearer ${token}`).send();
         expect(response.statusCode).toBe(409);
@@ -156,11 +169,37 @@ describe("PATCH/users/:userId/recover", () => {
     });
 });
 
+describe("PATCH/users/:userId/upgrade", () => {
+    test("should respond with a 200 status code when an user role is upgraded to 'admin'", async () => {   
+        const response = await request(app).patch(`/users/${userId3}/upgrade`).set("Authorization", `Bearer ${token}`).send();
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual({ message: "User role is upgraded to administrator" });
+    });
+
+    test("should respond with a 401 status code when token is missing", async () => {
+        const response = await request(app).patch(`/users/${userId3}/upgrade`).send();                                              
+        expect(response.statusCode).toBe(401);
+        expect(response.body).toEqual({ message: 'Access token is missing' });
+    });
+
+    test("should respond with a 403 status code when user is not admin", async () => {
+        const response = await request(app).patch(`/users/${userId2}/upgrade`).set("Authorization", `Bearer ${token2}`).send();                                              
+        expect(response.statusCode).toBe(403);
+        expect(response.body).toEqual({ message: "Access denied, admin only" });
+    });
+
+    test("should respond with a 404 status code when user is not found", async () => {
+        const response = await request(app).patch(`/users/xxxxx/upgrade`).set("Authorization", `Bearer ${token}`).send();
+        expect(response.statusCode).toBe(404);
+        expect(response.body).toEqual({ message: "User not found" })
+    });
+});
+
 describe("GET/users", () => {
     test("should respond with a 200 status code when users list is displayed succesfully", async () => {
         const response = await request(app).get("/users").set("Authorization", `Bearer ${token}`).send();
         expect(response.statusCode).toBe(200);
-        expect(response.body.length).toBe(3);
+        expect(response.body.length).toBe(4);
     });
 
     test("should respond with a 401 status code when token is missing", async () => {
