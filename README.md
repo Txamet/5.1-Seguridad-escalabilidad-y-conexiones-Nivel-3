@@ -41,9 +41,10 @@ Ahora has de abrir dos terminales, una para el front-end y otra para el back-end
 
 ### 3. Instalar dependencias
 
-En ambas carpetas instala todas las dependencias necesarias:
+En ambas carpetas instala todas las dependencias necesarias ejecutando el comando:
 
  `npm install`
+ 
 ### 4. Configurar variables de entorno
 Crea un archivo `.env` en la carpeta del nivel que quieras probar.
 
