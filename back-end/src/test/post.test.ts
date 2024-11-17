@@ -8,6 +8,7 @@ let token2: string;
 let userId2: string;
 let userId3: string;
 let postId: string;
+let postId2: string;
 
 beforeAll(async() => {
     const response = await request(app).post("/users/login").send({
@@ -29,6 +30,12 @@ beforeAll(async() => {
         "content": "Este es un post de prueba y creado para testing"
     });
     postId = post.body.id
+
+    const post2 = await request(app).post("/posts/create").set("Authorization", `Bearer ${token2}`).send({
+        "title": "Post para testing 2",
+        "content": "Este es otro post de prueba y creado para testing"
+    });
+    postId2 = post2.body.id
 });
 
 afterAll(() => {
@@ -38,11 +45,11 @@ afterAll(() => {
 describe("POST/posts/create", () => {
     test("should respond with a 200 status code when a post is created succesfully", async () => {
         const response = await request(app).post("/posts/create").set("Authorization", `Bearer ${token2}`).send({
-            "title": "Post para testing 2",
-            "content": "Este es otro post de prueba y creado para testing"
+            "title": "Post para testing 3",
+            "content": "Este es el tercer post de prueba y creado para testing"
         });
         expect(response.statusCode).toBe(200);
-        expect(response.body.title).toEqual("Post para testing 2");
+        expect(response.body.title).toEqual("Post para testing 3");
     });
 
     test("should respond with a 401 status code when access token is missing", async () => {
@@ -106,7 +113,7 @@ describe("PUT/posts/:postId", () => {
 });
 
 describe("DELETE/posts/:postId", () =>{
-    test("should respond with a 401 status code when an user isn`t authorized to delete another user post", async () => {
+    test("should respond with a 403 status code when an user isn`t authorized to delete another user post", async () => {
         const response = await request(app).delete(`/posts/${postId}`).set("Authorization", `Bearer ${token2}`).send();
         expect(response.statusCode).toBe(401);
         expect(response.body).toEqual({ message: "User isn't authorized to delete this post" });
@@ -126,6 +133,34 @@ describe("DELETE/posts/:postId", () =>{
 
     test("should respond with 404 status code when a post doesn`t exists", async () => {
         const response = await request(app).delete(`/posts/xxxx`).set("Authorization", `Bearer ${token}`).send();
+        expect(response.statusCode).toBe(404);
+        expect(response.body).toEqual({ message: "Post doesn't exists" });
+    }); 
+});
+
+describe("DELETE/posts/:postId/hard-delete", () =>{
+    test("should respond with a 403 status code when an user is not an admin", async () => {
+        const response = await request(app).delete(`/posts/${postId}/hard-delete`).set("Authorization", `Bearer ${token2}`).send();
+        expect(response.statusCode).toBe(403);
+        expect(response.body).toEqual({ message: "Access denied, admin only" });
+    });
+
+    test("should respond with a 200 status code when a post is hard deleted succesfully", async () => {
+        
+       
+        const response = await request(app).delete(`/posts/${postId2}/hard-delete`).set("Authorization", `Bearer ${token}`).send();
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual({message: "Post hard deleted"})
+    });
+
+    test("should respond with a 401 status code when access token is missing", async () => {
+        const response = await request(app).delete(`/posts/${postId}/hard-delete`).send();                                              
+        expect(response.statusCode).toBe(401);
+        expect(response.body).toEqual({ message: 'Access token is missing' });
+    });
+
+    test("should respond with 404 status code when a post doesn`t exists", async () => {
+        const response = await request(app).delete(`/posts/xxxx/hard-delete`).set("Authorization", `Bearer ${token}`).send();
         expect(response.statusCode).toBe(404);
         expect(response.body).toEqual({ message: "Post doesn't exists" });
     }); 

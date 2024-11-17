@@ -4,6 +4,7 @@ export interface PostRepository {
     createPost(post: PostEntity): Promise<PostEntity | null>;
     updatePost(id: string, post: PostEntity): Promise<PostEntity | null>;
     deletePost(id: string): Promise<void>;
+    hardDeletePost(id: string): Promise<void>;
     recoverPost(id: string): Promise<void>;
     getPostsByUser(id: string): Promise<PostEntity[]>;
     getDeletedPostsByUser(id: string): Promise<PostEntity[]>;

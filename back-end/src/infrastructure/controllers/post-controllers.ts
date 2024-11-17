@@ -92,6 +92,25 @@ export class PostController {
         }
     };
 
+    static async hardDeletePost(req: any, res: any) {
+        const postId = req.params.postId;
+        const userId = req.user?.id;
+        const userRole = req.user?.role;
+
+        const post = await postModel.findPostById(postId); 
+        if (!post) return res.status(404).json({ message: "Post doesn't exists" });
+        if (post?.userId !== userId && userRole === "simpleUser") return res.status(401).json({ message: "User isn't authorized to delete this post" });
+        
+        
+        try {
+            const deletedPost = await postUseCase.hardDeletePost(postId);
+            res.status(200).json({message: "Post hard deleted"});
+
+        } catch (error) {
+            res.status(500).json({ message: "Error retrieving data" })
+        }
+    };
+
     static async recoverPost(req: any, res: any) {
         const postId = req.params.postId;
         const userId = req.user?.id;

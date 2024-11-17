@@ -22,6 +22,10 @@ export class PostUseCase {
 
     async deletePost(id: string) {
         await this.postRepository.deletePost(id);
+    }  
+
+    async hardDeletePost(id: string) {
+        await this.postRepository.hardDeletePost(id);
     }    
 
     async recoverPost(id: string) {

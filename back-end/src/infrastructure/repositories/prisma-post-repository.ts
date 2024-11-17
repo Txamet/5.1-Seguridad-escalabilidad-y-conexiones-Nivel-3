@@ -41,6 +41,12 @@ export class prismaPostModel implements PostRepository {
         })
     }
 
+    async hardDeletePost(id: string): Promise<void> {
+        const deletedPost = await prisma.post.delete({
+            where: { id }  
+        })
+    }
+
     async recoverPost(id: string): Promise<void> {
         const recoveredPost = await prisma.post.update({
             where: { id },

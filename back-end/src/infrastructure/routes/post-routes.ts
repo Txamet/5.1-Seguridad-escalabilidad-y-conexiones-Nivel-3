@@ -256,11 +256,11 @@ router.put("/:postId", AuthMiddleware, PostController.updatePost);
  *             schema:
  *               type: object
  *               properties:
- *                 success:
+ *                 message:
  *                   type: string
  *                   description: post soft deleted
  *               example:
- *                 success: Post deleted 
+ *                 message: Post deleted 
  *       401: 
  *         description: User not authorized 
  *         content:
@@ -286,6 +286,58 @@ router.delete("/:postId", AuthMiddleware, PostController.deletePost);
 
 /**
  * @swagger
+ * /posts/{postId}/hard-delete:
+ *   delete:
+ *     summary: Hard delete a post
+ *     tags: [Posts]
+ *     security:
+ *       - Token: []
+ *     parameters:
+ *       - $ref: "#/components/parameters/postId"
+ *     responses:
+ *       200:
+ *         description: Post succesfully hard deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: post hard deleted
+ *               example:
+ *                 message: Post deleted 
+ *       401: 
+ *         description: User not authorized 
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/UserNotAuthorized" 
+ *       403:
+ *         description: Access restricted to administrators 
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/UserNotAdmin"
+ *       404: 
+ *         description: Post not found 
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/PostNotFound" 
+ *       500:
+ *         description: Error retrieving post data from database
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/ErrorOnDatabase"                 
+ */
+
+router.delete("/:postId/hard-delete", AuthMiddleware, authorizeAdmin, PostController.hardDeletePost);
+
+
+/**
+ * @swagger
  * /posts/{postId}/recover:
  *   patch:
  *     summary: Recover a deleted post
@@ -302,11 +354,11 @@ router.delete("/:postId", AuthMiddleware, PostController.deletePost);
  *             schema:
  *               type: object
  *               properties:
- *                 success:
+ *                 message:
  *                   type: string
  *                   description: post recovered from soft delete
  *               example:
- *                 success: Post recovered 
+ *                 message: Post recovered 
  *       401: 
  *         description: User not authorized 
  *         content:
@@ -490,11 +542,11 @@ router.get("/:postId", AuthMiddleware, PostController.getPost);
  *             schema:
  *               type: object
  *               properties:
- *                 success:
+ *                 message:
  *                   type: string
  *                   description: post liked
  *               example:
- *                 success: Post liked  
+ *                 message: Post liked  
  *       401:
  *         description: User isn't authorized to like the post
  *         content:

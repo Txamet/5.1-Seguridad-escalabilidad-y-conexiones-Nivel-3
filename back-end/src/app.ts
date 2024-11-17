@@ -27,7 +27,7 @@ app.use(cors({
 const BASE_URL = `http://localhost:${PORT}`;
 
 export const server = app.listen(PORT,()=>
-  console.log(`Server ready at: ${BASE_URL}`)
+  console.log(`Server ready at: ${BASE_URL}\n\nRead all the documentation at: ${BASE_URL}/docs`),
 );
 
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(specs));

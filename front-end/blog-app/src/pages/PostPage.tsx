@@ -102,6 +102,22 @@ const PostPage: React.FC = () => {
     }
   };
 
+  const handleHardDelete = async () => {
+    try {
+      const like = await api.delete(`/posts/${postId}/hard-delete`);
+      alert(like.data.message);
+      navigate("/posts")
+      
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        alert(`Error: ${error.response.data.message}`);
+      } else {
+        alert('Unkown error');
+      }
+      console.error(error);
+    }
+  };
+
   const handleRecover = async () => {
     try {
       const like = await api.patch(`/posts/${postId}/recover`);
@@ -154,6 +170,10 @@ const PostPage: React.FC = () => {
         <p></p> 
         {(authUser || adminUser) && post.data.deleted === false && (
           <button onClick = {handleDelete}>Delete this post</button>
+        )}
+        <p></p> 
+        {(adminUser) && post.data.deleted === false && (
+          <button onClick = {handleHardDelete}>Hard delete this post</button>
         )}
         <p></p> 
         {(authUser || adminUser) && post.data.deleted === true && (
