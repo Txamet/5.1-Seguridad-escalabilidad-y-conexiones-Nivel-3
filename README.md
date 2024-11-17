@@ -54,6 +54,7 @@ Puedes copiar y pegar el contenido del archivo `env.example` y luego editarlo co
 ### 1. Back-end
 Ejecuta el siguiente comando:
 `npx tsc`
+
 Y a continuación:
 `npm run api`
 
