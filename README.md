@@ -66,5 +66,5 @@ Ejecuta el siguiente comando:
 2. Clicka en el enlace del back-end y en la ruta del navegador añade "/docs" para ver la documentación de la api.
 
 # Testing
-En la cerpeta del back-end, y sin estar ejecutándose la api, ejecuta el siguiente comando:
+En la carpeta del back-end, y sin estar ejecutándose la api, ejecuta el siguiente comando:
 `npm run test`
