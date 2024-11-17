@@ -46,7 +46,7 @@ En ambas carpetas instala todas las dependencias necesarias ejecutando el comand
  `npm install`
  
 ### 4. Configurar variables de entorno
-Crea un archivo `.env` en la carpeta del nivel que quieras probar.
+Crea un archivo `.env` en ambas carpetas.
 
 Puedes copiar y pegar el contenido del archivo `env.example` y luego editarlo con los datos de tu base de datos `mySQL` y el puerto que prefieras usar.
 
